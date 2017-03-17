@@ -3,7 +3,37 @@ module pocnetconfschemaless {
     namespace "urn:opendaylight:params:xml:ns:yang:pocnetconfschemaless";
     prefix "pocnetconfschemaless";
 
-    revision "2015-01-05" {
+    revision "2017-03-17" {
         description "Initial revision of pocnetconfschemaless model";
+    }
+
+    rpc get-hostname {
+        description "Get the hostname of a NETCONF network device";
+        input {
+            leaf node-id {
+                type string;
+                description "Node identifier of the NETCONF device";
+            }
+        }
+        output {
+            leaf hostname {
+                type string;
+                description "hostname of the NETCONF device";
+            }
+        }
+    }
+
+    rpc set-hostname {
+        description "Set the hostname of a NETCONF network device";
+        input {
+            leaf node-id {
+                type string;
+                description "Node identifier of the NETCONF device";
+            }
+            leaf hostname {
+                type string;
+                description "New hostname of the NETCONF device";
+            }
+        }
     }
 }

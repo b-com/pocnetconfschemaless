@@ -8,6 +8,9 @@
 package com.bcom.pocnetconfschemaless.impl;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
+import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.pocnetconfschemaless.rev170317.PocnetconfschemalessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,15 +19,19 @@ public class PocnetconfschemalessProvider {
     private static final Logger LOG = LoggerFactory.getLogger(PocnetconfschemalessProvider.class);
 
     private final DataBroker dataBroker;
+    private final RpcProviderRegistry rpcProviderRegistry;
+    private BindingAwareBroker.RpcRegistration<PocnetconfschemalessService> serviceRegistration;
 
-    public PocnetconfschemalessProvider(final DataBroker dataBroker) {
+    public PocnetconfschemalessProvider(final DataBroker dataBroker, RpcProviderRegistry rpcProviderRegistry) {
         this.dataBroker = dataBroker;
+        this.rpcProviderRegistry = rpcProviderRegistry;
     }
 
     /**
      * Method called when the blueprint container is created.
      */
     public void init() {
+        serviceRegistration = rpcProviderRegistry.addRpcImplementation(PocnetconfschemalessService.class, new PocnetconfschemalessImpl());
         LOG.info("PocnetconfschemalessProvider Session Initiated");
     }
 
@@ -32,6 +39,7 @@ public class PocnetconfschemalessProvider {
      * Method called when the blueprint container is destroyed.
      */
     public void close() {
+        serviceRegistration.close();
         LOG.info("PocnetconfschemalessProvider Closed");
     }
 }
