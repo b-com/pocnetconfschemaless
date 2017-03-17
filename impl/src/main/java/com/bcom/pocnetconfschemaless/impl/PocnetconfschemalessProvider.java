@@ -7,7 +7,8 @@
  */
 package com.bcom.pocnetconfschemaless.impl;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
+import org.opendaylight.controller.md.sal.dom.api.DOMMountPointService;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.pocnetconfschemaless.rev170317.PocnetconfschemalessService;
@@ -18,20 +19,26 @@ public class PocnetconfschemalessProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(PocnetconfschemalessProvider.class);
 
-    private final DataBroker dataBroker;
     private final RpcProviderRegistry rpcProviderRegistry;
+    private final DOMMountPointService domMountPointService;
+    private final DOMDataBroker domDataBroker;
+
     private BindingAwareBroker.RpcRegistration<PocnetconfschemalessService> serviceRegistration;
 
-    public PocnetconfschemalessProvider(final DataBroker dataBroker, RpcProviderRegistry rpcProviderRegistry) {
-        this.dataBroker = dataBroker;
+    public PocnetconfschemalessProvider(final RpcProviderRegistry rpcProviderRegistry,
+                                        final DOMMountPointService domMountPointService,
+                                        final DOMDataBroker domDataBroker) {
         this.rpcProviderRegistry = rpcProviderRegistry;
+        this.domMountPointService = domMountPointService;
+        this.domDataBroker = domDataBroker;
     }
 
     /**
      * Method called when the blueprint container is created.
      */
     public void init() {
-        serviceRegistration = rpcProviderRegistry.addRpcImplementation(PocnetconfschemalessService.class, new PocnetconfschemalessImpl());
+        serviceRegistration = rpcProviderRegistry.addRpcImplementation(
+                PocnetconfschemalessService.class, new PocnetconfschemalessImpl(domMountPointService));
         LOG.info("PocnetconfschemalessProvider Session Initiated");
     }
 

@@ -8,6 +8,7 @@
 
 package com.bcom.pocnetconfschemaless.impl;
 
+import org.opendaylight.controller.md.sal.dom.api.DOMMountPointService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.pocnetconfschemaless.rev170317.*;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -21,6 +22,12 @@ import static org.opendaylight.yangtools.yang.common.RpcResultBuilder.success;
 public class PocnetconfschemalessImpl implements PocnetconfschemalessService {
     private static final Logger LOG = LoggerFactory.getLogger(PocnetconfschemalessImpl.class);
 
+    private final DOMMountPointService domMountPointService;
+
+    public PocnetconfschemalessImpl(DOMMountPointService domMountPointService) {
+        this.domMountPointService = domMountPointService;
+    }
+
     @Override
     public Future<RpcResult<Void>> setHostname(SetHostnameInput input) {
         LOG.info(String.format("set-hostname(node-id=%s, hostname=%s)", input.getNodeId(), input.getHostname()));
@@ -31,7 +38,9 @@ public class PocnetconfschemalessImpl implements PocnetconfschemalessService {
     @Override
     public Future<RpcResult<GetHostnameOutput>> getHostname(GetHostnameInput input) {
         LOG.info(String.format("get-hostname(node-id=%s)", input.getNodeId()));
-        GetHostnameOutput output = new GetHostnameOutputBuilder().setHostname("stub").build();
+        String hostname = Hostname.getHostname(domMountPointService, input.getNodeId());
+        LOG.info(String.format("hostname=%s", hostname));
+        GetHostnameOutput output = new GetHostnameOutputBuilder().setHostname(hostname).build();
         return success(output).buildFuture();
     }
 }

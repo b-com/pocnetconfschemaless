@@ -11,12 +11,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
   odl:use-default-for-reference-types="true">
 
-  <reference id="dataBroker"
+  <reference id="domDataBroker"
     interface="org.opendaylight.controller.md.sal.binding.api.DataBroker"
     odl:type="default" />
 
   <bean id="cliCommandsImpl" class="com.bcom.pocnetconfschemaless.cli.impl.PocnetconfschemalessCliCommandsImpl">
-    <argument ref="dataBroker" />
+    <argument ref="domDataBroker" />
   </bean>
   <service ref="cliCommandsImpl" odl:type="default"
     interface="com.bcom.pocnetconfschemaless.cli.api.PocnetconfschemalessCliCommands" />
