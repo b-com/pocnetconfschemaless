@@ -11,6 +11,7 @@ package com.bcom.pocnetconfschemaless.impl;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.dom.api.DOMMountPoint;
@@ -21,8 +22,13 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
+import org.opendaylight.yangtools.yang.data.api.schema.AnyXmlNode;
+import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class Hostname {
+    static Logger LOG = LoggerFactory.getLogger(Hostname.class);
 
     static YangInstanceIdentifier getMountPointId(String nodeId) {
         YangInstanceIdentifier mountPointId = YangInstanceIdentifier.builder()
@@ -79,10 +85,37 @@ class Hostname {
         DOMDataReadOnlyTransaction rtx = dataBroker.newReadOnlyTransaction();
 
         // The YANG Instance Identifier is relative to the mountpoint.
-        // When we set it to 'null', we read the whole device configuration
+        // (note: When we set it to 'null', we read the whole device configuration, but the netconf stack fails to
+        // analyze the response: the special value YangInstanceIdentifier.EMPTY must be used instead)
 
-        rtx.read(LogicalDatastoreType.CONFIGURATION, null);
+        YangInstanceIdentifier slashPath = YangInstanceIdentifier.EMPTY;
 
-        return "stub";
+        String hostname;
+        try {
+            Optional<NormalizedNode<?, ?>> opt = rtx.read(LogicalDatastoreType.CONFIGURATION, slashPath).checkedGet();
+
+            if (opt.isPresent()) {
+                final AnyXmlNode anyXmlData = (AnyXmlNode) opt.get();
+                org.w3c.dom.Node node = anyXmlData.getValue().getNode();
+                XmlUtils.logNode(Hostname.LOG, node);
+                hostname = HostnameXmlUtils.lookForHostname(node);
+                if (null == hostname) {
+                    hostname = "<noname4>";
+                }
+            } else {
+                hostname = "<noname1>";
+            }
+
+        } catch (ReadFailedException e) {
+            LOG.warn("Failed to read operational datastore: {}", e);
+            hostname = "<noname2>";
+        } catch (Exception e) {
+            LOG.warn("Failed to read operational datastore: {}", e);
+            hostname = "<noname3>";
+        } finally {
+            rtx.close();
+        }
+
+        return hostname;
     }
 }
