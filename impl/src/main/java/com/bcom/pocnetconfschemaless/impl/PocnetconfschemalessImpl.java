@@ -31,6 +31,7 @@ public class PocnetconfschemalessImpl implements PocnetconfschemalessService {
     @Override
     public Future<RpcResult<Void>> setHostname(SetHostnameInput input) {
         LOG.info(String.format("set-hostname(node-id=%s, hostname=%s)", input.getNodeId(), input.getHostname()));
+        Hostname.setHostname(domMountPointService, input.getNodeId(), input.getHostname());
         Void nothing = null;
         return RpcResultBuilder.success(nothing).buildFuture();
     }

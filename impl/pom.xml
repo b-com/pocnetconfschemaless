@@ -40,6 +40,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <version>${mdsal.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
+
     <!-- Testing Dependencies -->
     <dependency>
       <groupId>junit</groupId>

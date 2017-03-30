@@ -8,7 +8,12 @@
 
 package com.bcom.pocnetconfschemaless.impl;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -16,6 +21,87 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class XmlUtils {
+    static final Logger LOG = LoggerFactory.getLogger(XmlUtils.class);
+    static final DocumentBuilderFactory BUILDERFACTORY;
+
+    static {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setCoalescing(true);
+        factory.setIgnoringElementContentWhitespace(true);
+        factory.setIgnoringComments(true);
+        BUILDERFACTORY = factory;
+    }
+
+    /**
+     * Creates an empty XML Document for use with the DOM parser
+     *
+     * @return The empty document. null if it cannot be created.
+     */
+    public static Document newDocument() {
+        DocumentBuilder builder = null;
+        try {
+            builder = BUILDERFACTORY.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            LOG.debug("newDocument(): ", e);
+            return null;
+        }
+        Document doc = builder.newDocument();
+        return doc;
+    }
+
+    /**
+     * Add an attribute to a given element of a XML document.
+     *
+     * @param doc		The document to edit
+     * @param element	The element to edit
+     * @param attrName	The attribute to add
+     * @param attrValue	The added attribute value
+     */
+    public static void setAttr(Document doc, Element element, String attrName, String attrValue) {
+        Attr attr = doc.createAttribute(attrName);
+        attr.appendChild(doc.createTextNode(attrValue));
+        element.setAttributeNode(attr);
+    }
+
+    /**
+     * Create a child text element and append it to a given father element of a XML document.
+     *
+     * @param doc 			The document to edit
+     * @param father		The element in which the new element should be added
+     * @param elementName	The new element name
+     * @param elementValue	The new element value
+     */
+    public static void appendTextElement(Document doc, Element father, String elementName, String elementValue) {
+        Element child = doc.createElement(elementName);
+        father.appendChild(child);
+        child.appendChild(doc.createTextNode(elementValue));
+    }
+
+    /**
+     * Create a child element, append it to a given father and return the newly created element.
+     *
+     * @param doc 			The document to edit
+     * @param father		The element (father) in which the new element (child) should be added
+     * @param elementName	The child element name
+     * @return The created child element.
+     */
+    public static Element appendPlaceholderElement(Document doc, Element father, String elementName) {
+        Element child = doc.createElement(elementName);
+        father.appendChild(child);
+        return child;
+    }
+
+    /**
+     * Create an empty child element and append it to a given father .
+     *
+     * @param doc 			The document to edit
+     * @param father		The element (father) in which the new element (child) should be added
+     * @param elementName	The child element name
+     */
+    public static void appendEmptyElement(Document doc, Element father, String elementName) {
+        father.appendChild(doc.createElement(elementName));
+    }
 
     public static String nodeTypeToString(short nodeType) {
         String nodeTypeStr;
