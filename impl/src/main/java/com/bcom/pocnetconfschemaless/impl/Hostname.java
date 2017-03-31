@@ -8,14 +8,11 @@
 
 package com.bcom.pocnetconfschemaless.impl;
 
-import static org.opendaylight.netconf.sal.connect.netconf.util.NetconfMessageTransformUtil.NETCONF_QNAME;
-
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import javax.xml.transform.dom.DOMSource;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
-import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataWriteTransaction;
@@ -132,21 +129,38 @@ class Hostname {
         final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
         DOMDataWriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
 
+        /* This works, but let's try another approach. Commented out for history reasons: */
+//        Document hostnameDocument = HostnameXmlUtils.createSystemHostnameDocument(hostname);
+//        LOG.trace("setHostname(): hand-made XML document:");
+//        XmlUtils.logNode(LOG, hostnameDocument);
+//        YangInstanceIdentifier systemYIID = YangInstanceIdentifier.builder()
+//                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "system")))
+//                //.node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "hostname")))
+//                .build();
+//        AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
+//                .withNodeIdentifier(new YangInstanceIdentifier.NodeIdentifier(
+//                        QName.create(
+//                                HostnameXmlUtils.NS,
+//                                systemYIID.getLastPathArgument().getNodeType().getLocalName())))
+//                .withValue(new DOMSource(hostnameDocument.getDocumentElement()))
+//                .build();
+//        writeTransaction.put(LogicalDatastoreType.CONFIGURATION, systemYIID, anyXmlNode);
+
         Document hostnameDocument = HostnameXmlUtils.createHostnameDocument(hostname);
 
         LOG.trace("setHostname(): hand-made XML document:");
         XmlUtils.logNode(LOG, hostnameDocument);
 
-        YangInstanceIdentifier systemYIID = YangInstanceIdentifier.builder()
+        YangInstanceIdentifier hostnameYIID = YangInstanceIdentifier.builder()
                 .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "system")))
-                //.node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "hostname")))
+                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "hostname")))
                 .build();
 
         AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
                 .withNodeIdentifier(new YangInstanceIdentifier.NodeIdentifier(
                         QName.create(
                                 HostnameXmlUtils.NS,
-                                systemYIID.getLastPathArgument().getNodeType().getLocalName())))
+                                hostnameYIID.getLastPathArgument().getNodeType().getLocalName())))
                 .withValue(new DOMSource(hostnameDocument.getDocumentElement()))
                 .build();
 
@@ -156,7 +170,8 @@ class Hostname {
         // invoke edit-config, merge the config
         // writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, YangInstanceIdentifier.EMPTY, anyXmlNode);
         //writeTransaction.put(LogicalDatastoreType.CONFIGURATION, YangInstanceIdentifier.EMPTY, anyXmlNode);
-        writeTransaction.put(LogicalDatastoreType.CONFIGURATION, systemYIID, anyXmlNode);
+        writeTransaction.put(LogicalDatastoreType.CONFIGURATION, hostnameYIID, anyXmlNode);
+        //writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, systemYIID, anyXmlNode);
 
         // commit
         writeTransaction.submit();

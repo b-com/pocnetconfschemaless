@@ -9,7 +9,6 @@
 package com.bcom.pocnetconfschemaless.impl;
 
 import javax.xml.transform.dom.DOMSource;
-import org.junit.Assert;
 import org.junit.Test;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
@@ -26,12 +25,12 @@ public class HostnameXmlUtilsTest {
     @Test
     public void testBuildAnyXmlConfigSystemHostname() {
         LOG.trace("hostname document:");
-        Document hostnameDocument = HostnameXmlUtils.createHostnameDocument("localhost-from-ut");
+        Document hostnameDocument = HostnameXmlUtils.createSystemHostnameDocument("localhost-from-ut");
         XmlUtils.logNode(LOG, hostnameDocument);
 
         YangInstanceIdentifier hostnameYIID = YangInstanceIdentifier.builder()
                 .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "system")))
-                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "hostname")))
+                //.node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "hostname")))
                 .build();
 
         AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
@@ -49,7 +48,7 @@ public class HostnameXmlUtilsTest {
 //    @Test
 //    public void testBuildAnyXmlConfigSystemHostname2() {
 //        LOG.trace("hostname document:");
-//        Document hostnameDocument = HostnameXmlUtils.createHostnameDocument("localhost-from-ut");
+//        Document hostnameDocument = HostnameXmlUtils.createSystemHostnameDocument("localhost-from-ut");
 //        XmlUtils.logNode(LOG, hostnameDocument);
 //
 //        YangInstanceIdentifier hostnameYIID = YangInstanceIdentifier.builder()
