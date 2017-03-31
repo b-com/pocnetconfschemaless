@@ -8,11 +8,15 @@
 
 package com.bcom.pocnetconfschemaless.impl;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.util.concurrent.CheckedFuture;
+import com.google.common.util.concurrent.Futures;
 import javax.xml.transform.dom.DOMSource;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
+import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataWriteTransaction;
@@ -23,6 +27,8 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.yang.common.QName;
+import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.NodeIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.AnyXmlNode;
@@ -34,6 +40,8 @@ import org.w3c.dom.Document;
 
 class Hostname {
     static Logger LOG = LoggerFactory.getLogger(Hostname.class);
+
+    static private RpcResult<Void> SUCCESS = RpcResultBuilder.<Void>success().build();
 
     static YangInstanceIdentifier getMountPointId(String nodeId) {
         YangInstanceIdentifier mountPointId = YangInstanceIdentifier.builder()
@@ -174,18 +182,17 @@ class Hostname {
         //writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, systemYIID, anyXmlNode);
 
         // commit
-        writeTransaction.submit();
+        //writeTransaction.submit();
 
-        // TODO: find a way to get the result of the transaction, eg something like below or something synchronous
+        final CheckedFuture<Void, TransactionCommitFailedException> submit = writeTransaction.submit();
+        Futures.transform(submit, new Function<Void, RpcResult<Void>>() {
+            @Override
+            public RpcResult<Void> apply(final Void result) {
+                LOG.info("hostname '{}' writtent to '{}'", hostname, nodeId);
+                return SUCCESS;
+            }
+        });
 
-//        final CheckedFuture<Void, TransactionCommitFailedException> submit = writeTransaction.submit();
-//        return Futures.transform(submit, new Function<Void, RpcResult<Void>>() {
-//            @Override
-//            public RpcResult<Void> apply(final Void result) {
-//                LOG.info("{} Route(s) written to {}", input.getRoute().size(), input.getMountName());
-//                return SUCCESS;
-//            }
-//        });
-
+        // rem: in the real world, the future should be returned (see NcmountProvider.writeRoutes)
     }
 }
