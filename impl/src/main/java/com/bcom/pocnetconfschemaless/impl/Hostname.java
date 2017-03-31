@@ -137,16 +137,16 @@ class Hostname {
         LOG.trace("setHostname(): hand-made XML document:");
         XmlUtils.logNode(LOG, hostnameDocument);
 
-        YangInstanceIdentifier hostnameYIID = YangInstanceIdentifier.builder()
+        YangInstanceIdentifier systemYIID = YangInstanceIdentifier.builder()
                 .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "system")))
-                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "hostname")))
+                //.node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "hostname")))
                 .build();
 
         AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
                 .withNodeIdentifier(new YangInstanceIdentifier.NodeIdentifier(
                         QName.create(
                                 HostnameXmlUtils.NS,
-                                hostnameYIID.getLastPathArgument().getNodeType().getLocalName())))
+                                systemYIID.getLastPathArgument().getNodeType().getLocalName())))
                 .withValue(new DOMSource(hostnameDocument.getDocumentElement()))
                 .build();
 
@@ -155,7 +155,8 @@ class Hostname {
 
         // invoke edit-config, merge the config
         // writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, YangInstanceIdentifier.EMPTY, anyXmlNode);
-        writeTransaction.put(LogicalDatastoreType.CONFIGURATION, YangInstanceIdentifier.EMPTY, anyXmlNode);
+        //writeTransaction.put(LogicalDatastoreType.CONFIGURATION, YangInstanceIdentifier.EMPTY, anyXmlNode);
+        writeTransaction.put(LogicalDatastoreType.CONFIGURATION, systemYIID, anyXmlNode);
 
         // commit
         writeTransaction.submit();

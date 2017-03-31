@@ -8,8 +8,6 @@
 
 package com.bcom.pocnetconfschemaless.impl;
 
-//import static com.bcom.pocnetconfschemaless.impl.Hostname.LOG;
-
 import javax.xml.transform.dom.DOMSource;
 import org.junit.Assert;
 import org.junit.Test;
@@ -47,4 +45,35 @@ public class HostnameXmlUtilsTest {
         LOG.trace("AnyXml document:");
         XmlUtils.logNode(LOG, anyXmlNode.getValue().getNode());
     }
+
+//    @Test
+//    public void testBuildAnyXmlConfigSystemHostname2() {
+//        LOG.trace("hostname document:");
+//        Document hostnameDocument = HostnameXmlUtils.createHostnameDocument("localhost-from-ut");
+//        XmlUtils.logNode(LOG, hostnameDocument);
+//
+//        YangInstanceIdentifier hostnameYIID = YangInstanceIdentifier.builder()
+//                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "system")))
+//                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "hostname")))
+//                .build();
+//
+//        String localName = hostnameYIID.getLastPathArgument().getNodeType().getLocalName();  // <-- "hostname"
+//
+//        YangInstanceIdentifier emptyYIID = YangInstanceIdentifier.EMPTY;
+//        YangInstanceIdentifier.PathArgument pathArgument = emptyYIID.getLastPathArgument();  // <-- pathArgument = null
+//        QName nodeType = pathArgument.getNodeType();
+//        localName = nodeType.getLocalName();
+//
+//        AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
+//                .withNodeIdentifier(new YangInstanceIdentifier.NodeIdentifier(
+//                        QName.create(
+//                                HostnameXmlUtils.NS,
+//                                emptyYIID.getLastPathArgument().getNodeType().getLocalName())))
+//                .withValue(new DOMSource(hostnameDocument.getDocumentElement()))
+//                .build();
+//
+//        LOG.trace("AnyXml document:");
+//        XmlUtils.logNode(LOG, anyXmlNode.getValue().getNode());
+//    }
+
 }
