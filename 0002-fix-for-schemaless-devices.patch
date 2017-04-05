@@ -1,0 +1,59 @@
+From 482f74904c87c9ae766a767766fc80a82d594d3a Mon Sep 17 00:00:00 2001
+From: Gwenael Lambrouin <gwenael.lambrouin@b-com.com>
+Date: Wed, 5 Apr 2017 12:13:21 +0200
+Subject: [PATCH 2/2] fix for schemaless devices
+
+The transformer in NetconfBaseOps was improperly setup in the constructor.
+---
+ .../netconf/sal/connect/netconf/sal/KeepaliveSalFacade.java   |  4 ++--
+ .../netconf/sal/connect/netconf/util/NetconfBaseOps.java      | 11 ++++++++++-
+ 2 files changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/netconf/sal-netconf-connector/src/main/java/org/opendaylight/netconf/sal/connect/netconf/sal/KeepaliveSalFacade.java b/netconf/sal-netconf-connector/src/main/java/org/opendaylight/netconf/sal/connect/netconf/sal/KeepaliveSalFacade.java
+index c450ac6..4026c38 100644
+--- a/netconf/sal-netconf-connector/src/main/java/org/opendaylight/netconf/sal/connect/netconf/sal/KeepaliveSalFacade.java
++++ b/netconf/sal-netconf-connector/src/main/java/org/opendaylight/netconf/sal/connect/netconf/sal/KeepaliveSalFacade.java
+@@ -260,9 +260,9 @@ public final class KeepaliveSalFacade implements RemoteDeviceHandler<NetconfSess
+      * DOMRpcService proxy that attaches reset-keepalive-task and schedule
+      * request-timeout-task to each RPC invocation.
+      */
+-    private static final class KeepaliveDOMRpcService implements DOMRpcService {
++    public static final class KeepaliveDOMRpcService implements DOMRpcService {
+ 
+-        private final DOMRpcService deviceRpc;
++        public final DOMRpcService deviceRpc;
+         private ResetKeepalive resetKeepaliveTask;
+         private final long defaultRequestTimeoutMillis;
+         private final ScheduledExecutorService executor;
+diff --git a/netconf/sal-netconf-connector/src/main/java/org/opendaylight/netconf/sal/connect/netconf/util/NetconfBaseOps.java b/netconf/sal-netconf-connector/src/main/java/org/opendaylight/netconf/sal/connect/netconf/util/NetconfBaseOps.java
+index de61ee9..1b37015 100644
+--- a/netconf/sal-netconf-connector/src/main/java/org/opendaylight/netconf/sal/connect/netconf/util/NetconfBaseOps.java
++++ b/netconf/sal-netconf-connector/src/main/java/org/opendaylight/netconf/sal/connect/netconf/util/NetconfBaseOps.java
+@@ -35,6 +35,7 @@ import com.google.common.util.concurrent.Futures;
+ import com.google.common.util.concurrent.ListenableFuture;
+ import org.opendaylight.controller.md.sal.dom.api.DOMRpcResult;
+ import org.opendaylight.controller.md.sal.dom.api.DOMRpcService;
++import org.opendaylight.netconf.sal.connect.netconf.sal.KeepaliveSalFacade;
+ import org.opendaylight.netconf.sal.connect.netconf.sal.SchemalessNetconfDeviceRpc;
+ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.base._1._0.rev110601.copy.config.input.target.ConfigTarget;
+ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.base._1._0.rev110601.edit.config.input.EditContent;
+@@ -63,7 +64,15 @@ public final class NetconfBaseOps {
+     public NetconfBaseOps(final DOMRpcService rpc, final SchemaContext schemaContext) {
+         this.rpc = rpc;
+         this.schemaContext = schemaContext;
+-        if (rpc instanceof SchemalessNetconfDeviceRpc) {
++
++        boolean schemaless = false;
++        if (rpc instanceof KeepaliveSalFacade.KeepaliveDOMRpcService) {
++            KeepaliveSalFacade.KeepaliveDOMRpcService rpc2 = (KeepaliveSalFacade.KeepaliveDOMRpcService) rpc;
++            if (rpc2.deviceRpc instanceof SchemalessNetconfDeviceRpc) {
++                schemaless = true;
++            }
++        }
++        if (schemaless) {
+             this.transformer = new SchemalessRpcStructureTransformer();
+         } else {
+             this.transformer = new NetconfRpcStructureTransformer(schemaContext);
+-- 
+2.7.4
+

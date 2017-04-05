@@ -1,0 +1,25 @@
+From 139411be552c86fdece11f95931f9f3fa0b03ccd Mon Sep 17 00:00:00 2001
+From: Gwenael Lambrouin <gwenael.lambrouin@b-com.com>
+Date: Wed, 22 Mar 2017 17:06:54 +0100
+Subject: [PATCH 1/2] netconf-testtool: accept RSA hostname key
+
+---
+ .../java/org/opendaylight/netconf/test/tool/NetconfDeviceSimulator.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/NetconfDeviceSimulator.java b/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/NetconfDeviceSimulator.java
+index 165decc..90452be 100644
+--- a/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/NetconfDeviceSimulator.java
++++ b/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/NetconfDeviceSimulator.java
+@@ -260,7 +260,7 @@ public class NetconfDeviceSimulator implements Closeable {
+     private PEMGeneratorHostKeyProvider getPemGeneratorHostKeyProvider() {
+         try {
+             final Path tempFile = Files.createTempFile("tempKeyNetconfTest", "suffix");
+-            return new PEMGeneratorHostKeyProvider(tempFile.toAbsolutePath().toString());
++            return new PEMGeneratorHostKeyProvider(tempFile.toAbsolutePath().toString(), "RSA");
+         } catch (final IOException e) {
+             LOG.error("Unable to generate PEM key", e);
+             throw new RuntimeException(e);
+-- 
+2.7.4
+
