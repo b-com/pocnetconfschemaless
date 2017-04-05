@@ -1,0 +1,16 @@
+module hostname {
+    yang-version 1;
+    namespace "urn:opendaylight:hostname";
+    prefix "hn";
+
+    revision "2017-03-31";
+
+    container system {
+        leaf hostname {
+            type string;
+        }
+        leaf location {
+            type string;
+        }
+    }
+}

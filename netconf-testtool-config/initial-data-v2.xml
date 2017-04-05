@@ -1,0 +1,6 @@
+<data>
+  <system xmlns="urn:opendaylight:hostname">
+    <hostname>testtool-on-devel-machine</hostname>
+    <location>Rennes</location>
+  </system>
+</data>
