@@ -109,9 +109,12 @@ on récupère le code netconf buggé.</p>
 <div class="highlight-python"><div class="highlight"><pre>$ mkdir -p ~/code/roads
 $ git clone ssh://gitolite@forge.b-com.com/roads/SANDBOX/pocnetconfschemaless.git
 $ cd pocnetconfschemaless
-$ mvn clean install
+$ mvn clean install -DskipTests
 </pre></div>
 </div>
+<p>Remarque: le poc contient des tests unitaires que l&#8217;on peut exécuter avec <code class="docutils literal"><span class="pre">mvn</span> <span class="pre">test</span></code> dans le répertoire <code class="docutils literal"><span class="pre">impl</span></code>.
+Toutefois, les tests du module <code class="docutils literal"><span class="pre">features</span></code> ne passent pas, d&#8217;où la recommandation donnée ici de construire le poc sans
+passer les tests.</p>
 </div>
 <div class="section" id="recuperer-patcher-et-construire-le-projet-netconf">
 <h2>Récupérer, patcher et construire le projet netconf<a class="headerlink" href="#recuperer-patcher-et-construire-le-projet-netconf" title="Lien permanent vers ce titre">¶</a></h2>
@@ -145,7 +148,7 @@ le cache maven ~/.m2/repository. On va maintenant reconstruire pocnetconfschemal
 netconf. Pour cela, on va utiliser l&#8217;option <code class="docutils literal"><span class="pre">-nsu</span></code> (no snapshot update) qui permet d&#8217;éviter la mise à jour du
 cache maven avec une version plus récentes des artefacts netconf.</p>
 <div class="highlight-python"><div class="highlight"><pre>$ cd ~/code/roads/pocnetconfschemaless
-$ mvn clean install -nsu
+$ mvn clean install -nsu -DskipTests
 </pre></div>
 </div>
 <p>On dispose maintenant d&#8217;une distribution karaf avec un netconf patché dans
