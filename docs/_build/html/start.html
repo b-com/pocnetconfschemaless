@@ -1,0 +1,175 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Démarrer le logiciel pocnetconfschemaless et le device NETCONF &mdash; documentation pocnetconfschemaless 0.1.0-SNAPSHOT</title>
+    
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0-SNAPSHOT',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="top" title="documentation pocnetconfschemaless 0.1.0-SNAPSHOT" href="index.html" />
+    <link rel="next" title="Utiliser le logiciel pocnetconfschemaless" href="use.html" />
+    <link rel="prev" title="Construire le logiciel pocnetconfschemaless" href="build.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="use.html" title="Utiliser le logiciel pocnetconfschemaless"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="build.html" title="Construire le logiciel pocnetconfschemaless"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table des Matières</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Démarrer le logiciel pocnetconfschemaless et le device NETCONF</a><ul>
+<li><a class="reference internal" href="#demarrer-opendaylight">Démarrer OpenDaylight</a></li>
+<li><a class="reference internal" href="#demarrer-netconf-testtool">Démarrer netconf-testtool</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Sujet précédent</h4>
+  <p class="topless"><a href="build.html"
+                        title="Chapitre précédent">Construire le logiciel pocnetconfschemaless</a></p>
+  <h4>Sujet suivant</h4>
+  <p class="topless"><a href="use.html"
+                        title="Chapitre suivant">Utiliser le logiciel pocnetconfschemaless</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Cette page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/start.txt"
+            rel="nofollow">Montrer le code source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Saisissez un mot clef ou un nom de module, classe ou fonction.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="demarrer-le-logiciel-pocnetconfschemaless-et-le-device-netconf">
+<h1>Démarrer le logiciel pocnetconfschemaless et le device NETCONF<a class="headerlink" href="#demarrer-le-logiciel-pocnetconfschemaless-et-le-device-netconf" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="demarrer-opendaylight">
+<h2>Démarrer OpenDaylight<a class="headerlink" href="#demarrer-opendaylight" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>$ cd ~/code/roads/pocnetconfschemaless/karaf/target/assembly
+$ bin/karaf
+opendaylight-user@root&gt;log:set TRACE org.opendaylight.netconf.sal
+opendaylight-user@root&gt;log:set TRACE com.bcom
+opendaylight-user@root&gt;feature:install odl-netconf-console
+opendaylight-user@root&gt;log:tail
+</pre></div>
+</div>
+<p>Attendre l&#8217;apparition du log suivant:</p>
+<div class="highlight-python"><div class="highlight"><pre>2017-04-05 13:50:53,582 | INFO  | sing-executor-11 | NetconfDevice                    | 304 - org.opendaylight.netconf.sal-netconf-connector - 1.4.3.SNAPSHOT | RemoteDevice{controller-config}: Netconf connector initialized successfully
+</pre></div>
+</div>
+</div>
+<div class="section" id="demarrer-netconf-testtool">
+<h2>Démarrer netconf-testtool<a class="headerlink" href="#demarrer-netconf-testtool" title="Lien permanent vers ce titre">¶</a></h2>
+<p>A la place d&#8217;un vrai équipement réseau, le poc travaille avec un simulateur d&#8217;équipement NETCONF fourni dans le
+projet netconf d&#8217;ODL.</p>
+<p>Pour le poc, la structure de la configuration utilisée par netconf-testtool est donnée dans un fichier YANG construit
+pour les besoins du poc:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cat ~/code/roads/pocnetconfschemaless/netconf-testtool-config/yang-hostname-v2/hostname@2017-03-31.yang
+module hostname {
+    yang-version 1;
+    namespace &quot;urn:opendaylight:hostname&quot;;
+    prefix &quot;hn&quot;;
+
+    revision &quot;2017-03-31&quot;;
+
+    container system {
+        leaf hostname {
+            type string;
+        }
+        leaf location {
+            type string;
+        }
+    }
+}
+</pre></div>
+</div>
+<p>Pour démarrer netconf-testtool:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd ~/code/roads/pocnetconfschemaless/netconf-testtool-config
+$ java -jar ~/code/opendaylight/netconf/netconf/tools/netconf-testtool/target/netconf-testtool-1.1.3-SNAPSHOT-executable.jar \
+    --schemas-dir yang-hostname-v2/  --debug true
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Index général"
+             >index</a></li>
+        <li class="right" >
+          <a href="use.html" title="Utiliser le logiciel pocnetconfschemaless"
+             >suivant</a> |</li>
+        <li class="right" >
+          <a href="build.html" title="Construire le logiciel pocnetconfschemaless"
+             >précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2017, Gwenael Lambrouin.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

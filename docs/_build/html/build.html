@@ -1,0 +1,182 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Construire le logiciel pocnetconfschemaless &mdash; documentation pocnetconfschemaless 0.1.0-SNAPSHOT</title>
+    
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0-SNAPSHOT',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="top" title="documentation pocnetconfschemaless 0.1.0-SNAPSHOT" href="index.html" />
+    <link rel="next" title="Démarrer le logiciel pocnetconfschemaless et le device NETCONF" href="start.html" />
+    <link rel="prev" title="Documentation de pocnetconfschemaless" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="start.html" title="Démarrer le logiciel pocnetconfschemaless et le device NETCONF"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Documentation de pocnetconfschemaless"
+             accesskey="P">précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table des Matières</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Construire le logiciel pocnetconfschemaless</a><ul>
+<li><a class="reference internal" href="#recuperer-et-construire-une-premiere-fois-le-code-de-pocnetconfschemaless">Récupérer et construire une première fois le code de pocnetconfschemaless</a></li>
+<li><a class="reference internal" href="#recuperer-patcher-et-construire-le-projet-netconf">Récupérer, patcher et construire le projet netconf</a></li>
+<li><a class="reference internal" href="#reconstruire-le-logiciel-pocnetconfschemaless">Reconstruire le logiciel pocnetconfschemaless</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Sujet précédent</h4>
+  <p class="topless"><a href="index.html"
+                        title="Chapitre précédent">Documentation de pocnetconfschemaless</a></p>
+  <h4>Sujet suivant</h4>
+  <p class="topless"><a href="start.html"
+                        title="Chapitre suivant">Démarrer le logiciel pocnetconfschemaless et le device NETCONF</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Cette page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/build.txt"
+            rel="nofollow">Montrer le code source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Saisissez un mot clef ou un nom de module, classe ou fonction.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="construire-le-logiciel-pocnetconfschemaless">
+<h1>Construire le logiciel pocnetconfschemaless<a class="headerlink" href="#construire-le-logiciel-pocnetconfschemaless" title="Lien permanent vers ce titre">¶</a></h1>
+<p>Cette version de pocnetconfschemaless utilise la version SNAPSHOT de la version Boron d&#8217;OpenDaylight. En effet,
+elle nécessite de patcher la projet OpenDaylight netconf afin de corriger un bug dans le code netconf d&#8217;ODL et un bug
+dans l&#8217;outil de test netconf-testtool présent dans le projet netconf.</p>
+<div class="section" id="recuperer-et-construire-une-premiere-fois-le-code-de-pocnetconfschemaless">
+<h2>Récupérer et construire une première fois le code de pocnetconfschemaless<a class="headerlink" href="#recuperer-et-construire-une-premiere-fois-le-code-de-pocnetconfschemaless" title="Lien permanent vers ce titre">¶</a></h2>
+<p>On construit une première fois le logiciel pocnetconfschemaless en utilisant les dépendances maven officielles
+d&#8217;OpenDaylight. Cela permet de tirer toutes les dépendances et de les mettres en cache dans ~/.m2/repository. Mais
+on récupère le code netconf buggé.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ mkdir -p ~/code/roads
+$ git clone ssh://gitolite@forge.b-com.com/roads/SANDBOX/pocnetconfschemaless.git
+$ cd pocnetconfschemaless
+$ mvn clean install
+</pre></div>
+</div>
+</div>
+<div class="section" id="recuperer-patcher-et-construire-le-projet-netconf">
+<h2>Récupérer, patcher et construire le projet netconf<a class="headerlink" href="#recuperer-patcher-et-construire-le-projet-netconf" title="Lien permanent vers ce titre">¶</a></h2>
+<p>On récupère le code du projet netconf depuis le mirroir GitHub d&#8217;ODL, et on travaille sur la branche stable/boron:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ mkdir -p ~/code/opendaylight
+$ git clone https://github.com/opendaylight/netconf.git
+$ cd netconf
+$ git checkout stable/boron
+La branche stable/boron est paramétrée pour suivre la branche distante stable/boron depuis origin.
+Basculement sur la nouvelle branche &#39;stable/boron&#39;
+</pre></div>
+</div>
+<p>Depuis le répertoire du projet netconf, appliquer les patchs:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd ~/code/opendaylight/netconf
+$ git am &lt; ~/code/roads/pocnetconfschemaless/0001-netconf-testtool-accept-RSA-hostname-key.patch
+Application de  netconf-testtool: accept RSA hostname key
+$ git am &lt; ~/code/roads/pocnetconfschemaless/0002-fix-for-schemaless-devices.patch
+Application de  fix for schemaless devices
+</pre></div>
+</div>
+<p>Construire le projet netconf avec:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd ~/code/opendaylight/netconf
+$ mvn clean install -DskipTests
+</pre></div>
+</div>
+</div>
+<div class="section" id="reconstruire-le-logiciel-pocnetconfschemaless">
+<h2>Reconstruire le logiciel pocnetconfschemaless<a class="headerlink" href="#reconstruire-le-logiciel-pocnetconfschemaless" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Lors de la construction du projet netconf lors de l&#8217;étape précédente, les produits de la génération ont été copiés dans
+le cache maven ~/.m2/repository. On va maintenant reconstruire pocnetconfschemaless en utilisant cette version de
+netconf. Pour cela, on va utiliser l&#8217;option <code class="docutils literal"><span class="pre">-nsu</span></code> (no snapshot update) qui permet d&#8217;éviter la mise à jour du
+cache maven avec une version plus récentes des artefacts netconf.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd ~/code/roads/pocnetconfschemaless
+$ mvn clean install -nsu
+</pre></div>
+</div>
+<p>On dispose maintenant d&#8217;une distribution karaf avec un netconf patché dans
+<code class="docutils literal"><span class="pre">~/code/roads/pocnetconfschemaless/karaf/target/assembly</span></code>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Index général"
+             >index</a></li>
+        <li class="right" >
+          <a href="start.html" title="Démarrer le logiciel pocnetconfschemaless et le device NETCONF"
+             >suivant</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Documentation de pocnetconfschemaless"
+             >précédent</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2017, Gwenael Lambrouin.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>
