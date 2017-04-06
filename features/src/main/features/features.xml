@@ -22,6 +22,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
   <feature name='odl-pocnetconfschemaless' version='${project.version}' description='OpenDaylight :: pocnetconfschemaless'>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+    <feature version='${netconf-connector.version}'>odl-netconf-connector</feature>
     <feature version='${project.version}'>odl-pocnetconfschemaless-api</feature>
     <bundle>mvn:com.bcom.pocnetconfschemaless/pocnetconfschemaless-impl/{{VERSION}}</bundle>
   </feature>

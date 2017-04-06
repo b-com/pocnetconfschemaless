@@ -17,11 +17,7 @@ on récupère le code netconf buggé.
    $ mkdir -p ~/code/roads
    $ git clone ssh://gitolite@forge.b-com.com/roads/SANDBOX/pocnetconfschemaless.git
    $ cd pocnetconfschemaless
-   $ mvn clean install -DskipTests
-
-Remarque: le poc contient des tests unitaires que l'on peut exécuter avec ``mvn test`` dans le répertoire ``impl``.
-Toutefois, les tests du module ``features`` ne passent pas, d'où la recommandation donnée ici de construire le poc sans
-passer les tests.
+   $ mvn clean install
 
 Récupérer, patcher et construire le projet netconf
 --------------------------------------------------
@@ -65,7 +61,7 @@ cache maven avec une version plus récentes des artefacts netconf.
 ::
 
    $ cd ~/code/roads/pocnetconfschemaless
-   $ mvn clean install -nsu -DskipTests
+   $ mvn clean install -nsu
 
 On dispose maintenant d'une distribution karaf avec un netconf patché dans
 ``~/code/roads/pocnetconfschemaless/karaf/target/assembly``.
