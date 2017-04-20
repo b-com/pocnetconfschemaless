@@ -25,7 +25,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </prerequisites>
 
   <properties>
-    <karaf.localFeature>odl-pocnetconfschemaless-ui</karaf.localFeature>
+    <!-- Do not load pocnetconfschemaless automatically. Else, the SSH connection to NETCONF
+         devices that use 4096-bit-long Diffie-Hellman keys will fail: -->
+    <!--<karaf.localFeature>odl-pocnetconfschemaless-ui</karaf.localFeature>-->
   </properties>
 
   <dependencyManagement>
