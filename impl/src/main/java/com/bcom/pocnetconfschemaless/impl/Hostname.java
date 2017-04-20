@@ -133,7 +133,67 @@ class Hostname {
         return hostname;
     }
 
-    static void setHostname(final DOMMountPointService domMountPointService, String nodeId, String hostname) {
+    static void editConfig(final DOMMountPointService domMountPointService, String nodeId,
+                           YangInstanceIdentifier yangInstanceIdentifier, AnyXmlNode anyXmlNode) {
+        final DOMMountPoint mountPoint = getMountPoint(domMountPointService, nodeId);
+        final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
+        DOMDataWriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
+
+        LOG.trace("editConfig(): XML document passed as a AnyXmlNode:");
+        XmlUtils.logNode(LOG, anyXmlNode.getValue().getNode());
+
+        // invoke edit-config
+        writeTransaction.put(LogicalDatastoreType.CONFIGURATION, yangInstanceIdentifier, anyXmlNode);
+
+        // commit asynchronously
+        final CheckedFuture<Void, TransactionCommitFailedException> submit = writeTransaction.submit();
+        Futures.transform(submit, new Function<Void, RpcResult<Void>>() {
+            @Override
+            public RpcResult<Void> apply(final Void result) {
+                LOG.info("config writtent to '{}'", nodeId);
+                return SUCCESS;
+            }
+        });
+
+        // rem: in the real world, the future should be returned (see NcmountProvider.writeRoutes)
+    }
+
+    static void setHostnameJunOS(final DOMMountPointService domMountPointService,
+                                 String nodeId, String hostname) {
+
+        Document hostnameDocument = HostnameXmlUtils.createHostnameDocumentJunOS(hostname);
+
+        LOG.trace("setHostnameJunOS(): hand-made XML document:");
+        XmlUtils.logNode(LOG, hostnameDocument);
+
+        YangInstanceIdentifier yangInstanceIdentifier = YangInstanceIdentifier.builder()
+                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "configuration")))
+                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "system")))
+                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "host-name")))
+                .build();
+
+        AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
+                .withNodeIdentifier(new YangInstanceIdentifier.NodeIdentifier(
+                        QName.create(
+                                HostnameXmlUtils.JUNOS_NS,
+                                yangInstanceIdentifier.getLastPathArgument().getNodeType().getLocalName())))
+                .withValue(new DOMSource(hostnameDocument.getDocumentElement()))
+                .build();
+
+        LOG.trace("setHostnameJunOS(): XML document after conversion to AnyXmlNode:");
+        XmlUtils.logNode(LOG, anyXmlNode.getValue().getNode());
+
+        editConfig(domMountPointService, nodeId, yangInstanceIdentifier, anyXmlNode);
+    }
+
+    static void setHostname(final DOMMountPointService domMountPointService,
+                            String nodeId, String deviceFamily, String hostname) {
+
+        if (deviceFamily.equals("junos")) {
+            setHostnameJunOS(domMountPointService, nodeId, hostname);
+            return;
+        }
+
         final DOMMountPoint mountPoint = getMountPoint(domMountPointService, nodeId);
         final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
         DOMDataWriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();

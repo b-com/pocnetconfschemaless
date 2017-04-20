@@ -21,6 +21,7 @@ public class HostnameXmlUtils {
     private static final Logger log = LoggerFactory.getLogger(HostnameXmlUtils.class);
 
     public static final String NS = "urn:opendaylight:hostname";
+    public static final String JUNOS_NS = "http://xml.juniper.net/xnm/1.1/xnm";
 
     public static final QName QNAME = QName.create(NS, "system").intern();
 
@@ -114,4 +115,27 @@ public class HostnameXmlUtils {
         return doc;
     }
 
+    /** Build an XML document to configure the hostname of a JunOS device,
+     * starting just under the <system> element
+     *
+     * @param hostname The name of the host
+     *
+     * @return The XML document for use with the DOM parser. null in case of problem.
+     */
+
+    static Document createHostnameDocumentJunOS(String hostname) {
+        Document doc = null;
+        try {
+            doc = XmlUtils.newDocument();
+
+            Element hostnameElement = doc.createElementNS(JUNOS_NS, "host-name");
+            doc.appendChild(hostnameElement);
+            hostnameElement.appendChild(doc.createTextNode(hostname));
+        }
+        catch (Exception e) {
+            log.debug(String.format("Could not build XML document to configure hostname: %s", hostname), e);
+            doc = null;
+        }
+        return doc;
+    }
 }
