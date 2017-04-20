@@ -38,8 +38,9 @@ public class PocnetconfschemalessImpl implements PocnetconfschemalessService {
 
     @Override
     public Future<RpcResult<GetHostnameOutput>> getHostname(GetHostnameInput input) {
-        LOG.info(String.format("get-hostname(node-id=%s)", input.getNodeId()));
-        String hostname = Hostname.getHostname(domMountPointService, input.getNodeId());
+        LOG.info(String.format("get-hostname(node-id=%s, device-family=%s)",
+                input.getNodeId(), input.getDeviceFamily()));
+        String hostname = Hostname.getHostname(domMountPointService, input.getNodeId(), input.getDeviceFamily());
         LOG.info(String.format("hostname=%s", hostname));
         GetHostnameOutput output = new GetHostnameOutputBuilder().setHostname(hostname).build();
         return success(output).buildFuture();

@@ -14,6 +14,11 @@ module pocnetconfschemaless {
                 type string;
                 description "Node identifier of the NETCONF device";
             }
+            leaf device-family {
+                type string;
+                description "The family of the NETCONF device to talk to the device.
+                    Can be one of 'junos' or 'netconf-testtool'";
+            }
         }
         output {
             leaf hostname {

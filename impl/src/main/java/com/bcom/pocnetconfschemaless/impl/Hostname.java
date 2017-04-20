@@ -86,11 +86,12 @@ class Hostname {
     /** Get the device hostname from its configuration
      *
      * @param nodeId Name of the NETCONF mount point
+     * @param deviceFamily Family of the NETCONF device (junos, netconf-testtool)
      *
      * @return the hostname
      */
 
-    static String getHostname(final DOMMountPointService domMountPointService, String nodeId) {
+    static String getHostname(final DOMMountPointService domMountPointService, String nodeId, String deviceFamily) {
         final DOMMountPoint mountPoint = getMountPoint(domMountPointService, nodeId);
 
         final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
@@ -111,20 +112,20 @@ class Hostname {
                 final AnyXmlNode anyXmlData = (AnyXmlNode) opt.get();
                 org.w3c.dom.Node node = anyXmlData.getValue().getNode();
                 XmlUtils.logNode(LOG, node);
-                hostname = HostnameXmlUtils.lookForHostname(node);
+                hostname = HostnameXmlUtils.lookForHostname(node, deviceFamily);
                 if (null == hostname) {
-                    hostname = "<noname4>";
+                    hostname = "[noname4]";
                 }
             } else {
-                hostname = "<noname1>";
+                hostname = "[noname1]";
             }
 
         } catch (ReadFailedException e) {
             LOG.warn("Failed to read operational datastore: {}", e);
-            hostname = "<noname2>";
+            hostname = "[noname2]";
         } catch (Exception e) {
             LOG.warn("Failed to read operational datastore: {}", e);
-            hostname = "<noname3>";
+            hostname = "[noname3]";
         } finally {
             rtx.close();
         }

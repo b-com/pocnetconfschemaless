@@ -31,7 +31,7 @@ public class HostnameXmlUtils {
      * @return The hostname as a String. null if no hostname can be found
      */
 
-    static String lookForHostname(Node node ) {
+    static String lookForHostname(Node node, String deviceFamily) {
         String hostname = null;
 
         try {
@@ -40,7 +40,12 @@ public class HostnameXmlUtils {
             if (! root.getNodeName().equals("data"))
                 return null;
 
-            NodeList hostnameNodes = root.getElementsByTagName("hostname");
+            String hostnameTag = "hostname";
+            if (deviceFamily.equals("junos")) {
+                hostnameTag = "host-name";
+            }
+
+            NodeList hostnameNodes = root.getElementsByTagName(hostnameTag);
             Node hostnameNode = hostnameNodes.item(0);
             NodeList childs = hostnameNode.getChildNodes();
             for (int i=0; i<childs.getLength(); i++) {
