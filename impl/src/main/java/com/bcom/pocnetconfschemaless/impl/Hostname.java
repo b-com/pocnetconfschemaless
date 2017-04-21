@@ -143,7 +143,7 @@ class Hostname {
         XmlUtils.logNode(LOG, anyXmlNode.getValue().getNode());
 
         // invoke edit-config
-        writeTransaction.put(LogicalDatastoreType.CONFIGURATION, yangInstanceIdentifier, anyXmlNode);
+        writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, yangInstanceIdentifier, anyXmlNode);
 
         // commit asynchronously
         final CheckedFuture<Void, TransactionCommitFailedException> submit = writeTransaction.submit();
@@ -189,7 +189,7 @@ class Hostname {
     static void setHostname(final DOMMountPointService domMountPointService,
                             String nodeId, String deviceFamily, String hostname) {
 
-        if (deviceFamily.equals("junos")) {
+        if ((deviceFamily != null) && (deviceFamily.equals("junos"))) {
             setHostnameJunOS(domMountPointService, nodeId, hostname);
             return;
         }
@@ -237,6 +237,10 @@ class Hostname {
         XmlUtils.logNode(LOG, anyXmlNode.getValue().getNode());
 
         // invoke edit-config, merge the config
+        //
+        // note: writeTransaction.put() is in my experience the preferred method
+        //       to use with netconf-testtool.
+
         // writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, YangInstanceIdentifier.EMPTY, anyXmlNode);
         //writeTransaction.put(LogicalDatastoreType.CONFIGURATION, YangInstanceIdentifier.EMPTY, anyXmlNode);
         writeTransaction.put(LogicalDatastoreType.CONFIGURATION, hostnameYIID, anyXmlNode);

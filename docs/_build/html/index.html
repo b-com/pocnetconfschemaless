@@ -89,7 +89,9 @@
 <h1>Documentation de pocnetconfschemaless<a class="headerlink" href="#documentation-de-pocnetconfschemaless" title="Lien permanent vers ce titre">¶</a></h1>
 <p>pocnetconfschemaless est un PoC développé à b-com qui montre comment interagir avec un équipement NETCONF ne proposant
 pas de modèle YANG depuis le code d&#8217;une application OpenDaylight.</p>
-<p>Contents:</p>
+<p>Le poc permet de lire et d&#8217;écrire le hostname d&#8217;un device NETCONF. Les devices supportés sont
+netconf-testtool (simulateur d&#8217;équipement NETCONF fourni avec ODL) et le routeur Juniper MX5 de b-com.</p>
+<p>Table des matières:</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="build.html">Construire le logiciel pocnetconfschemaless</a><ul>
@@ -103,12 +105,20 @@ pas de modèle YANG depuis le code d&#8217;une application OpenDaylight.</p>
 <li class="toctree-l2"><a class="reference internal" href="start.html#demarrer-netconf-testtool">Démarrer netconf-testtool</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="use.html">Utiliser le logiciel pocnetconfschemaless</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="use.html#monter-le-device-netconf-testtool">Monter le device netconf-testtool</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use.html#lire-le-hostname">Lire le hostname</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use.html#ecrire-le-hostname">Ecrire le hostname</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use.html#relire-le-hostname">Relire le hostname</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use.html#demonter-le-device-netconf-testtool">Démonter le device netconf-testtool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_netconf_testtool.html">Utiliser pocnetconfschemaless avec netconf-testtool</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="use_netconf_testtool.html#monter-le-device-netconf-testtool">Monter le device netconf-testtool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_netconf_testtool.html#lire-le-hostname">Lire le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_netconf_testtool.html#ecrire-le-hostname">Ecrire le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_netconf_testtool.html#relire-le-hostname">Relire le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_netconf_testtool.html#demonter-le-device-netconf-testtool">Démonter le device netconf-testtool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="use_junos_device.html">Utiliser pocnetconfschemaless avec un équipement Juniper sous JunOS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="use_junos_device.html#monter-le-device-pjunren1">Monter le device pjunren1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_junos_device.html#lire-le-hostname">Lire le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_junos_device.html#ecrire-modifier-le-hostname">Ecrire (modifier) le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_junos_device.html#relire-le-hostname">Relire le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_junos_device.html#demonter-le-device-pjunren1">Démonter le device pjunren1</a></li>
 </ul>
 </li>
 </ul>

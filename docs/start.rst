@@ -1,6 +1,8 @@
 Démarrer le logiciel pocnetconfschemaless et le device NETCONF
 ==============================================================
 
+pocnetconfschemaless peut travailler soit avec netconf-testtool, soit avec le routeur Juniper MX5.
+
 Démarrer OpenDaylight
 ---------------------
 
@@ -10,6 +12,7 @@ Démarrer OpenDaylight
    $ bin/karaf
    opendaylight-user@root>log:set TRACE org.opendaylight.netconf.sal
    opendaylight-user@root>log:set TRACE com.bcom
+   opendaylight-user@root>feature:install odl-pocnetconfschemaless-ui
    opendaylight-user@root>feature:install odl-netconf-console
    opendaylight-user@root>log:tail
 
@@ -17,10 +20,19 @@ Attendre l'apparition du log suivant::
 
    2017-04-05 13:50:53,582 | INFO  | sing-executor-11 | NetconfDevice                    | 304 - org.opendaylight.netconf.sal-netconf-connector - 1.4.3.SNAPSHOT | RemoteDevice{controller-config}: Netconf connector initialized successfully
 
+.. warning:: Les features du poc et de netconf ne doivent pas être chargées automatiquement lors du premier démarrage
+   de karaf. C'est le comportement par défaut de pocnetconfschemaless. Sinon, à cause d'un bug, la connexion SSH ne
+   s'établit pas avec netconf-testtool ou avec le routeur Juniper MX5.
+
+.. note:: L'installation de la feature ``odl-netconf-console`` n'est pas nécessaire pour utiliser le poc. Elle
+   est toutefois utile pour voir simplement l'état de la connexion d'ODL avec les différents devices NETCONF.
+
+.. _start-netconf-testtool:
+
 Démarrer netconf-testtool
 -------------------------
 
-A la place d'un vrai équipement réseau, le poc travaille avec un simulateur d'équipement NETCONF fourni dans le
+A la place d'un vrai équipement réseau, le poc peut travailler avec le simulateur d'équipement NETCONF fourni dans le
 projet netconf d'ODL.
 
 Pour le poc, la structure de la configuration utilisée par netconf-testtool est donnée dans un fichier YANG construit

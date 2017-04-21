@@ -97,12 +97,14 @@
             
   <div class="section" id="demarrer-le-logiciel-pocnetconfschemaless-et-le-device-netconf">
 <h1>Démarrer le logiciel pocnetconfschemaless et le device NETCONF<a class="headerlink" href="#demarrer-le-logiciel-pocnetconfschemaless-et-le-device-netconf" title="Lien permanent vers ce titre">¶</a></h1>
+<p>pocnetconfschemaless peut travailler soit avec netconf-testtool, soit avec le routeur Juniper MX5.</p>
 <div class="section" id="demarrer-opendaylight">
 <h2>Démarrer OpenDaylight<a class="headerlink" href="#demarrer-opendaylight" title="Lien permanent vers ce titre">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre>$ cd ~/code/roads/pocnetconfschemaless/karaf/target/assembly
 $ bin/karaf
 opendaylight-user@root&gt;log:set TRACE org.opendaylight.netconf.sal
 opendaylight-user@root&gt;log:set TRACE com.bcom
+opendaylight-user@root&gt;feature:install odl-pocnetconfschemaless-ui
 opendaylight-user@root&gt;feature:install odl-netconf-console
 opendaylight-user@root&gt;log:tail
 </pre></div>
@@ -111,10 +113,21 @@ opendaylight-user@root&gt;log:tail
 <div class="highlight-python"><div class="highlight"><pre>2017-04-05 13:50:53,582 | INFO  | sing-executor-11 | NetconfDevice                    | 304 - org.opendaylight.netconf.sal-netconf-connector - 1.4.3.SNAPSHOT | RemoteDevice{controller-config}: Netconf connector initialized successfully
 </pre></div>
 </div>
+<div class="admonition warning">
+<p class="first admonition-title">Avertissement</p>
+<p class="last">Les features du poc et de netconf ne doivent pas être chargées automatiquement lors du premier démarrage
+de karaf. C&#8217;est le comportement par défaut de pocnetconfschemaless. Sinon, à cause d&#8217;un bug, la connexion SSH ne
+s&#8217;établit pas avec netconf-testtool ou avec le routeur Juniper MX5.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">L&#8217;installation de la feature <code class="docutils literal"><span class="pre">odl-netconf-console</span></code> n&#8217;est pas nécessaire pour utiliser le poc. Elle
+est toutefois utile pour voir simplement l&#8217;état de la connexion d&#8217;ODL avec les différents devices NETCONF.</p>
+</div>
 </div>
 <div class="section" id="demarrer-netconf-testtool">
-<h2>Démarrer netconf-testtool<a class="headerlink" href="#demarrer-netconf-testtool" title="Lien permanent vers ce titre">¶</a></h2>
-<p>A la place d&#8217;un vrai équipement réseau, le poc travaille avec un simulateur d&#8217;équipement NETCONF fourni dans le
+<span id="start-netconf-testtool"></span><h2>Démarrer netconf-testtool<a class="headerlink" href="#demarrer-netconf-testtool" title="Lien permanent vers ce titre">¶</a></h2>
+<p>A la place d&#8217;un vrai équipement réseau, le poc peut travailler avec le simulateur d&#8217;équipement NETCONF fourni dans le
 projet netconf d&#8217;ODL.</p>
 <p>Pour le poc, la structure de la configuration utilisée par netconf-testtool est donnée dans un fichier YANG construit
 pour les besoins du poc:</p>

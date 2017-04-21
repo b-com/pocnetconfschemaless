@@ -1,13 +1,14 @@
-Utiliser le logiciel pocnetconfschemaless
-=========================================
+Utiliser pocnetconfschemaless avec netconf-testtool
+===================================================
 
-Le poc permet de lire et d'écrire le hostname d'un device NETCONF.
+Pour démarrer le device, voir :ref:`start-netconf-testtool`.
 
 Le poc s'utilise en passant des requêtes RESTConf au service de configuration netconf d'ODL (pour le montage
 des équipements) et au service pocnetconfschemaless (pour lancer les requêtes de lecture/écriture du hostname).
 
 On suppose que le client RESTConf (eg Firefox + plugin RESTClient) se trouve sur la même machine qu'ODL. La connexion
 à ODL se fait avec le login ``admin`` et le mot de passe ``admin``.
+
 
 Monter le device netconf-testtool
 ---------------------------------
@@ -51,11 +52,18 @@ Lire le hostname
        }
    }
 
+.. note::
+
+   Dans tous les appels ``get-hostname`` et ``set-hostname``, on pourrait rajouter la famille de device NETCONF
+   avec ``"device-family": "netconf-testtool"``.
+
+   Mais ce n'est pas nécessaire car c'est la valeur par défaut.
+
 pocnetconftesttool répond avec le contenu suivant::
 
     {
          "output": {
-             "hostname": "<noname4>"
+             "hostname": "[noname4]"
          }
     }
 
@@ -144,3 +152,4 @@ Démonter le device netconf-testtool
 Une fois le travail sur l'équipement terminé, on peut le démonter avec la requête REST suivant::
 
    DELETE http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/netconf-testtool
+
