@@ -102,11 +102,18 @@ class Hostname {
         // (note: When we set it to 'null', we read the whole device configuration, but the netconf stack fails to
         // analyze the response: the special value YangInstanceIdentifier.EMPTY must be used instead)
 
-        YangInstanceIdentifier slashPath = YangInstanceIdentifier.EMPTY;
+        YangInstanceIdentifier yiid = YangInstanceIdentifier.EMPTY;
+        if ((deviceFamily != null) && (deviceFamily.equals("junos"))) {
+            yiid = YangInstanceIdentifier.builder()
+                    .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "configuration")))
+                    .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "system")))
+                    .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "host-name")))
+                    .build();
+        }
 
         String hostname;
         try {
-            Optional<NormalizedNode<?, ?>> opt = rtx.read(LogicalDatastoreType.CONFIGURATION, slashPath).checkedGet();
+            Optional<NormalizedNode<?, ?>> opt = rtx.read(LogicalDatastoreType.CONFIGURATION, yiid).checkedGet();
 
             if (opt.isPresent()) {
                 final AnyXmlNode anyXmlData = (AnyXmlNode) opt.get();

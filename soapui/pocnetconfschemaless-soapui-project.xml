@@ -90,7 +90,7 @@
                     <con:params/>
                     <con:element>data</con:element>
                 </con:representation>
-                <con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>201</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" id="a3c1443d-91c3-4ac7-aca0-ae95fd3d3b07" mediaType="application/xml" postQueryString="false">
+                <con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>201</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>201</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>201</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" id="a3c1443d-91c3-4ac7-aca0-ae95fd3d3b07" mediaType="application/xml" postQueryString="false">
                     <con:settings>
                         <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
   &lt;con:entry key="Accept" value="application/xml"/>
@@ -151,10 +151,9 @@
                     <con:params/>
                     <con:element>data</con:element>
                 </con:representation>
-                <con:request name="Request 1" id="e15caf94-66ea-4723-852e-60cb7bf7c901" mediaType="application/json" postQueryString="false">
+                <con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" id="e15caf94-66ea-4723-852e-60cb7bf7c901" mediaType="application/json" postQueryString="false">
                     <con:settings>
-                        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/>
-                        </con:setting>
+                        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
                     </con:settings>
                     <con:endpoint>http://localhost:8181</con:endpoint>
                     <con:request/>
@@ -259,7 +258,7 @@
                     <con:params/>
                     <con:element>data</con:element>
                 </con:representation>
-                <con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>201</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>201</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" id="a3c1443d-91c3-4ac7-aca0-ae95fd3d3b07" mediaType="application/xml" postQueryString="false">
+                <con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>201</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>201</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>201</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" id="a3c1443d-91c3-4ac7-aca0-ae95fd3d3b07" mediaType="application/xml" postQueryString="false">
                     <con:settings>
                         <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
   &lt;con:entry key="Accept" value="application/xml"/>
@@ -320,7 +319,7 @@
                     <con:params/>
                     <con:element>data</con:element>
                 </con:representation>
-                <con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" id="e15caf94-66ea-4723-852e-60cb7bf7c901" mediaType="application/json" postQueryString="false">
+                <con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" id="e15caf94-66ea-4723-852e-60cb7bf7c901" mediaType="application/json" postQueryString="false">
                     <con:settings>
                         <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
                     </con:settings>

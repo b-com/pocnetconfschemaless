@@ -18,7 +18,7 @@ Démarrer OpenDaylight
 
 Attendre l'apparition du log suivant::
 
-   2017-04-05 13:50:53,582 | INFO  | sing-executor-11 | NetconfDevice                    | 304 - org.opendaylight.netconf.sal-netconf-connector - 1.4.3.SNAPSHOT | RemoteDevice{controller-config}: Netconf connector initialized successfully
+    2017-04-21 16:07:19,238 | INFO  | config-pusher    | ConfigPusherImpl                 | 130 - org.opendaylight.controller.config-persister-impl - 0.5.3.SNAPSHOT | Successfully pushed configuration snapshot 04-xsql.xml(odl-pocnetconfschemaless-ui,odl-pocnetconfschemaless-ui)
 
 .. warning:: Les features du poc et de netconf ne doivent pas être chargées automatiquement lors du premier démarrage
    de karaf. C'est le comportement par défaut de pocnetconfschemaless. Sinon, à cause d'un bug, la connexion SSH ne
