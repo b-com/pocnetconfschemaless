@@ -103,12 +103,22 @@ class Hostname {
         // analyze the response: the special value YangInstanceIdentifier.EMPTY must be used instead)
 
         YangInstanceIdentifier yiid = YangInstanceIdentifier.EMPTY;
-        if ((deviceFamily != null) && (deviceFamily.equals("junos"))) {
-            yiid = YangInstanceIdentifier.builder()
-                    .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "configuration")))
-                    .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "system")))
-                    .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "host-name")))
-                    .build();
+        if (deviceFamily != null) {
+            if (deviceFamily.equals("junos")) {
+                yiid = YangInstanceIdentifier.builder()
+                        .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "configuration")))
+                        .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "system")))
+                        .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "host-name")))
+                        .build();
+            }
+            else if (deviceFamily.equals("nokia")) {
+                yiid = YangInstanceIdentifier.builder()
+                        .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_NS, "configure")))
+                        .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_SYSTEM_NS, "system")))
+                        //.node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_SYSTEM_NS, "name")))
+                            // => cannot filter on a leaf element with Nokia R14
+                        .build();
+            }
         }
 
         String hostname;
@@ -193,12 +203,46 @@ class Hostname {
         editConfig(domMountPointService, nodeId, yangInstanceIdentifier, anyXmlNode);
     }
 
+    static void setHostnameNokia(final DOMMountPointService domMountPointService,
+                                 String nodeId, String hostname) {
+
+        Document hostnameDocument = HostnameXmlUtils.createHostnameDocumentNokia(hostname);
+
+        LOG.trace("setHostnameNokia(): hand-made XML document:");
+        XmlUtils.logNode(LOG, hostnameDocument);
+
+        YangInstanceIdentifier yangInstanceIdentifier = YangInstanceIdentifier.builder()
+                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_NS, "configure")))
+                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_SYSTEM_NS, "system")))
+                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_SYSTEM_NS, "name")))
+                .build();  // TODO: factorize with getHostname()
+
+        AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
+                .withNodeIdentifier(new YangInstanceIdentifier.NodeIdentifier(
+                        QName.create(
+                                HostnameXmlUtils.NOKIA_CONF_SYSTEM_NS,
+                                yangInstanceIdentifier.getLastPathArgument().getNodeType().getLocalName())))
+                .withValue(new DOMSource(hostnameDocument.getDocumentElement()))
+                .build();
+
+        LOG.trace("setHostnameNokia(): XML document after conversion to AnyXmlNode:");
+        XmlUtils.logNode(LOG, anyXmlNode.getValue().getNode());
+
+        editConfig(domMountPointService, nodeId, yangInstanceIdentifier, anyXmlNode);
+    }
+
     static void setHostname(final DOMMountPointService domMountPointService,
                             String nodeId, String deviceFamily, String hostname) {
 
-        if ((deviceFamily != null) && (deviceFamily.equals("junos"))) {
-            setHostnameJunOS(domMountPointService, nodeId, hostname);
-            return;
+        if (deviceFamily != null) {
+            if (deviceFamily.equals("junos")) {
+                setHostnameJunOS(domMountPointService, nodeId, hostname);
+                return;
+            }
+            else if (deviceFamily.equals("nokia")) {
+                setHostnameNokia(domMountPointService, nodeId, hostname);
+                return;
+            }
         }
 
         final DOMMountPoint mountPoint = getMountPoint(domMountPointService, nodeId);

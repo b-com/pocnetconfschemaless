@@ -22,6 +22,8 @@ public class HostnameXmlUtils {
 
     public static final String NS = "urn:opendaylight:hostname";
     public static final String JUNOS_NS = "http://xml.juniper.net/xnm/1.1/xnm";
+    public static final String NOKIA_CONF_NS = "urn:nokia.com:sros:ns:yang:sr:conf";
+    public static final String NOKIA_CONF_SYSTEM_NS = "urn:nokia.com:sros:ns:yang:sr:conf-system";
 
     public static final QName QNAME = QName.create(NS, "system").intern();
 
@@ -44,6 +46,9 @@ public class HostnameXmlUtils {
             String hostnameTag = "hostname";
             if (deviceFamily.equals("junos")) {
                 hostnameTag = "host-name";
+            }
+            else if (deviceFamily.equals("nokia")) {
+                hostnameTag = "name";
             }
 
             NodeList hostnameNodes = root.getElementsByTagName(hostnameTag);
@@ -129,6 +134,30 @@ public class HostnameXmlUtils {
             doc = XmlUtils.newDocument();
 
             Element hostnameElement = doc.createElementNS(JUNOS_NS, "host-name");
+            doc.appendChild(hostnameElement);
+            hostnameElement.appendChild(doc.createTextNode(hostname));
+        }
+        catch (Exception e) {
+            log.debug(String.format("Could not build XML document to configure hostname: %s", hostname), e);
+            doc = null;
+        }
+        return doc;
+    }
+
+    /** Build an XML document to configure the hostname of a Nokia device,
+     * starting just under the <system> element
+     *
+     * @param hostname The name of the host
+     *
+     * @return The XML document for use with the DOM parser. null in case of problem.
+     */
+
+    static Document createHostnameDocumentNokia(String hostname) {
+        Document doc = null;
+        try {
+            doc = XmlUtils.newDocument();
+
+            Element hostnameElement = doc.createElementNS(NOKIA_CONF_SYSTEM_NS, "name");
             doc.appendChild(hostnameElement);
             hostnameElement.appendChild(doc.createTextNode(hostname));
         }
