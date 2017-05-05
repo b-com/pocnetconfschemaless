@@ -59,6 +59,6 @@ pour les besoins du poc::
 Pour démarrer netconf-testtool::
 
    $ cd ~/code/roads/pocnetconfschemaless/netconf-testtool-config
-   $ java -jar ~/code/opendaylight/netconf/netconf/tools/netconf-testtool/target/netconf-testtool-1.1.3-SNAPSHOT-executable.jar \
+   $ java -jar ~/code/opendaylight/netconf/netconf/tools/netconf-testtool/target/netconf-testtool-1.2.0-SNAPSHOT-executable.jar \
        --schemas-dir yang-hostname-v2/  --debug true
 

@@ -12,15 +12,31 @@ pas de modèle YANG depuis le code d'une application OpenDaylight.
 Le poc permet de lire et d'écrire le hostname d'un device NETCONF. Les devices supportés sont
 netconf-testtool (simulateur d'équipement NETCONF fourni avec ODL) et le routeur Juniper MX5 de b-com.
 
-Table des matières:
+User Guide
+----------
 
 .. toctree::
    :maxdepth: 2
 
-   build
-   start
-   use_netconf_testtool
-   use_junos_device
+   user_guide/build
+   user_guide/start
+   user_guide/use_netconf_testtool
+   user_guide/use_junos_device
+   user_guide/use_nokia_sros_device
+
+Developer guide
+---------------
+
+.. toctree::
+
+   developer_guide/build_the_docs
+
+OpenDaylight issues
+-------------------
+
+.. toctree::
+
+   odl_issues/01_bad_transformer
 
 
 Indices and tables

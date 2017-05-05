@@ -1,25 +1,12 @@
+La documentation de pocnetconfschemaless au format HTML est disponible dans
+le répertoire _build/html. Pour lire la documentation, ouvrir le fichier
+_build/html/index.html à l'aide d'un navigateur Internet.
+
 La doc de pocnetconfschemaless est écrite au format reStructuredText, et la
-version HTML est générée à l'aide de Sphinx.
+version HTML est générée à l'aide de Sphinx. Pour avoir des informations sur
+la façon de modifier et de générer la documentation, voir docs/build_the_docs
+.rst.
 
-
-Lire la documentation
-=====================
-
-A l'aide d'un navigateur Internet, ouvrir le fichier _build/html/index.html.
-
-
-Modifier et re-générer la documentation
-=======================================
-
-Installer Sphinx:
-
-    pip install Sphinx
-
-Pour modifier la documentation: éditer les fichiers .rst.
-
-Pour (re-)générer la documentation HTML:
-
-    make html
-
-La documentation est générée dans le répertoire _build/html. Le point d'entrée
-est _build/html/index.html.
+Remarque: pour que la documentation HTML soit plus facilement accessible, elle a
+été placée sous Git. C'est un pis aller en attendant de trouver une meilleure
+solution.

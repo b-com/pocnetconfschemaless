@@ -9,26 +9,24 @@
     
     <title>Utiliser pocnetconfschemaless avec netconf-testtool &mdash; documentation pocnetconfschemaless 0.1.0-SNAPSHOT</title>
     
-    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '../',
         VERSION:     '0.1.0-SNAPSHOT',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/translations.js"></script>
-    <script type="text/javascript" src="_static/bizstyle.js"></script>
-    <link rel="top" title="documentation pocnetconfschemaless 0.1.0-SNAPSHOT" href="index.html" />
-    <link rel="next" title="Utiliser pocnetconfschemaless avec un équipement Juniper sous JunOS" href="use_junos_device.html" />
-    <link rel="prev" title="Démarrer le logiciel pocnetconfschemaless et le device NETCONF" href="start.html" />
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="documentation pocnetconfschemaless 0.1.0-SNAPSHOT" href="../index.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -39,20 +37,14 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="Index général"
+          <a href="../genindex.html" title="Index général"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="use_junos_device.html" title="Utiliser pocnetconfschemaless avec un équipement Juniper sous JunOS"
-             accesskey="N">suivant</a> |</li>
-        <li class="right" >
-          <a href="start.html" title="Démarrer le logiciel pocnetconfschemaless et le device NETCONF"
-             accesskey="P">précédent</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table des Matières</a></h3>
+  <h3><a href="../index.html">Table des Matières</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Utiliser pocnetconfschemaless avec netconf-testtool</a><ul>
 <li><a class="reference internal" href="#monter-le-device-netconf-testtool">Monter le device netconf-testtool</a></li>
@@ -64,22 +56,16 @@
 </li>
 </ul>
 
-  <h4>Sujet précédent</h4>
-  <p class="topless"><a href="start.html"
-                        title="Chapitre précédent">Démarrer le logiciel pocnetconfschemaless et le device NETCONF</a></p>
-  <h4>Sujet suivant</h4>
-  <p class="topless"><a href="use_junos_device.html"
-                        title="Chapitre suivant">Utiliser pocnetconfschemaless avec un équipement Juniper sous JunOS</a></p>
   <div role="note" aria-label="source link">
     <h3>Cette page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/use_netconf_testtool.txt"
+      <li><a href="../_sources/user_guide/use_netconf_testtool.txt"
             rel="nofollow">Montrer le code source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Recherche rapide</h3>
-    <form class="search" action="search.html" method="get">
+    <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -161,6 +147,12 @@ avec <code class="docutils literal"><span class="pre">&quot;device-family&quot;:
 </div>
 <div class="section" id="ecrire-le-hostname">
 <h2>Ecrire le hostname<a class="headerlink" href="#ecrire-le-hostname" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This test requires a fix in ODL netconf project (see
+<a class="reference internal" href="../odl_issues/01_bad_transformer.html#issue-bad-transformer"><span>ODL Issue 1: bad RPC structure transformer</span></a>). The fix is already enabled if you followed
+the instructions in <a class="reference internal" href="build.html#patch-netconf"><span>Récupérer, patcher et construire le projet netconf</span></a>.</p>
+</div>
 <p>On va définir le hostname à la valeur <code class="docutils literal"><span class="pre">ntt</span></code> avec:</p>
 <div class="highlight-python"><div class="highlight"><pre>POST http://localhost:8181/restconf/operations/pocnetconfschemaless:set-hostname
 Content-Type: application/yang.data+json
@@ -252,15 +244,9 @@ Accept: application/json
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="Index général"
+          <a href="../genindex.html" title="Index général"
              >index</a></li>
-        <li class="right" >
-          <a href="use_junos_device.html" title="Utiliser pocnetconfschemaless avec un équipement Juniper sous JunOS"
-             >suivant</a> |</li>
-        <li class="right" >
-          <a href="start.html" title="Démarrer le logiciel pocnetconfschemaless et le device NETCONF"
-             >précédent</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

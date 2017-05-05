@@ -27,7 +27,7 @@
     <script type="text/javascript" src="_static/translations.js"></script>
     <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="top" title="documentation pocnetconfschemaless 0.1.0-SNAPSHOT" href="#" />
-    <link rel="next" title="Construire le logiciel pocnetconfschemaless" href="build.html" />
+    <link rel="next" title="Construire le logiciel pocnetconfschemaless" href="user_guide/build.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -41,7 +41,7 @@
           <a href="genindex.html" title="Index général"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="build.html" title="Construire le logiciel pocnetconfschemaless"
+          <a href="user_guide/build.html" title="Construire le logiciel pocnetconfschemaless"
              accesskey="N">suivant</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
       </ul>
@@ -50,12 +50,17 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table des Matières</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Documentation de pocnetconfschemaless</a></li>
+<li><a class="reference internal" href="#">Documentation de pocnetconfschemaless</a><ul>
+<li><a class="reference internal" href="#user-guide">User Guide</a></li>
+<li><a class="reference internal" href="#developer-guide">Developer guide</a></li>
+<li><a class="reference internal" href="#opendaylight-issues">OpenDaylight issues</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
   <h4>Sujet suivant</h4>
-  <p class="topless"><a href="build.html"
+  <p class="topless"><a href="user_guide/build.html"
                         title="Chapitre suivant">Construire le logiciel pocnetconfschemaless</a></p>
   <div role="note" aria-label="source link">
     <h3>Cette page</h3>
@@ -91,37 +96,78 @@
 pas de modèle YANG depuis le code d&#8217;une application OpenDaylight.</p>
 <p>Le poc permet de lire et d&#8217;écrire le hostname d&#8217;un device NETCONF. Les devices supportés sont
 netconf-testtool (simulateur d&#8217;équipement NETCONF fourni avec ODL) et le routeur Juniper MX5 de b-com.</p>
-<p>Table des matières:</p>
+<div class="section" id="user-guide">
+<h2>User Guide<a class="headerlink" href="#user-guide" title="Lien permanent vers ce titre">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="build.html">Construire le logiciel pocnetconfschemaless</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="build.html#recuperer-et-construire-une-premiere-fois-le-code-de-pocnetconfschemaless">Récupérer et construire une première fois le code de pocnetconfschemaless</a></li>
-<li class="toctree-l2"><a class="reference internal" href="build.html#recuperer-patcher-et-construire-le-projet-netconf">Récupérer, patcher et construire le projet netconf</a></li>
-<li class="toctree-l2"><a class="reference internal" href="build.html#reconstruire-le-logiciel-pocnetconfschemaless">Reconstruire le logiciel pocnetconfschemaless</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/build.html">Construire le logiciel pocnetconfschemaless</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/build.html#recuperer-et-construire-une-premiere-fois-le-code-de-pocnetconfschemaless">Récupérer et construire une première fois le code de pocnetconfschemaless</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/build.html#recuperer-patcher-et-construire-le-projet-netconf">Récupérer, patcher et construire le projet netconf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/build.html#reconstruire-le-logiciel-pocnetconfschemaless">Reconstruire le logiciel pocnetconfschemaless</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="start.html">Démarrer le logiciel pocnetconfschemaless et le device NETCONF</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="start.html#demarrer-opendaylight">Démarrer OpenDaylight</a></li>
-<li class="toctree-l2"><a class="reference internal" href="start.html#demarrer-netconf-testtool">Démarrer netconf-testtool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/start.html">Démarrer le logiciel pocnetconfschemaless et le device NETCONF</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/start.html#demarrer-opendaylight">Démarrer OpenDaylight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/start.html#demarrer-netconf-testtool">Démarrer netconf-testtool</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="use_netconf_testtool.html">Utiliser pocnetconfschemaless avec netconf-testtool</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="use_netconf_testtool.html#monter-le-device-netconf-testtool">Monter le device netconf-testtool</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use_netconf_testtool.html#lire-le-hostname">Lire le hostname</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use_netconf_testtool.html#ecrire-le-hostname">Ecrire le hostname</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use_netconf_testtool.html#relire-le-hostname">Relire le hostname</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use_netconf_testtool.html#demonter-le-device-netconf-testtool">Démonter le device netconf-testtool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/use_netconf_testtool.html">Utiliser pocnetconfschemaless avec netconf-testtool</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_netconf_testtool.html#monter-le-device-netconf-testtool">Monter le device netconf-testtool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_netconf_testtool.html#lire-le-hostname">Lire le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_netconf_testtool.html#ecrire-le-hostname">Ecrire le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_netconf_testtool.html#relire-le-hostname">Relire le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_netconf_testtool.html#demonter-le-device-netconf-testtool">Démonter le device netconf-testtool</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="use_junos_device.html">Utiliser pocnetconfschemaless avec un équipement Juniper sous JunOS</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="use_junos_device.html#monter-le-device-pjunren1">Monter le device pjunren1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use_junos_device.html#lire-le-hostname">Lire le hostname</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use_junos_device.html#ecrire-modifier-le-hostname">Ecrire (modifier) le hostname</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use_junos_device.html#relire-le-hostname">Relire le hostname</a></li>
-<li class="toctree-l2"><a class="reference internal" href="use_junos_device.html#demonter-le-device-pjunren1">Démonter le device pjunren1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/use_junos_device.html">Utiliser pocnetconfschemaless avec un équipement Juniper sous JunOS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_junos_device.html#monter-le-device-pjunren1">Monter le device pjunren1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_junos_device.html#lire-le-hostname">Lire le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_junos_device.html#ecrire-modifier-le-hostname">Ecrire (modifier) le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_junos_device.html#relire-le-hostname">Relire le hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_junos_device.html#demonter-le-device-pjunren1">Démonter le device pjunren1</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/use_nokia_sros_device.html">Use pocnetconfschemaless with a Nokia SR OS device</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_nokia_sros_device.html#mount-the-device">Mount the device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_nokia_sros_device.html#read-the-hostname">Read the hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_nokia_sros_device.html#write-modify-the-hostname">Write (modify) the hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_nokia_sros_device.html#re-read-hostname">Re-read hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/use_nokia_sros_device.html#unmount-the-device">Unmount the device</a></li>
 </ul>
 </li>
 </ul>
+</div>
+</div>
+<div class="section" id="developer-guide">
+<h2>Developer guide<a class="headerlink" href="#developer-guide" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide/build_the_docs.html">Générer la documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide/build_the_docs.html#installer-sphinx">Installer Sphinx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide/build_the_docs.html#editer-la-documentation">Editer la documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide/build_the_docs.html#generer-la-documentation-au-format-html">Générer la documentation au format HTML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide/build_the_docs.html#generer-la-documentation-au-format-pdf">Générer la documentation au format PDF</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="opendaylight-issues">
+<h2>OpenDaylight issues<a class="headerlink" href="#opendaylight-issues" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="odl_issues/01_bad_transformer.html">ODL Issue 1: bad RPC structure transformer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="odl_issues/01_bad_transformer.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="odl_issues/01_bad_transformer.html#the-problem-in-detail">The problem in detail</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="odl_issues/01_bad_transformer.html#reproduce-the-problem">Reproduce the problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="odl_issues/01_bad_transformer.html#karaf-log-analysis">karaf log analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="odl_issues/01_bad_transformer.html#problem-correction">Problem correction</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -146,7 +192,7 @@ netconf-testtool (simulateur d&#8217;équipement NETCONF fourni avec ODL) et le 
           <a href="genindex.html" title="Index général"
              >index</a></li>
         <li class="right" >
-          <a href="build.html" title="Construire le logiciel pocnetconfschemaless"
+          <a href="user_guide/build.html" title="Construire le logiciel pocnetconfschemaless"
              >suivant</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
       </ul>

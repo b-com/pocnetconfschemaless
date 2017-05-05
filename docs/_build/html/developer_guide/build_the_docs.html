@@ -1,0 +1,152 @@
+
+
+<!doctype html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Générer la documentation &mdash; documentation pocnetconfschemaless 0.1.0-SNAPSHOT</title>
+    
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-SNAPSHOT',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="top" title="documentation pocnetconfschemaless 0.1.0-SNAPSHOT" href="../index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table des Matières</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Générer la documentation</a><ul>
+<li><a class="reference internal" href="#installer-sphinx">Installer Sphinx</a></li>
+<li><a class="reference internal" href="#editer-la-documentation">Editer la documentation</a></li>
+<li><a class="reference internal" href="#generer-la-documentation-au-format-html">Générer la documentation au format HTML</a></li>
+<li><a class="reference internal" href="#generer-la-documentation-au-format-pdf">Générer la documentation au format PDF</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>Cette page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/developer_guide/build_the_docs.txt"
+            rel="nofollow">Montrer le code source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Saisissez un mot clef ou un nom de module, classe ou fonction.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="generer-la-documentation">
+<h1>Générer la documentation<a class="headerlink" href="#generer-la-documentation" title="Lien permanent vers ce titre">¶</a></h1>
+<p>La doc de pocnetconfschemaless est écrite au format reStructuredText, et la
+version HTML est générée à l&#8217;aide de Sphinx.</p>
+<div class="section" id="installer-sphinx">
+<h2>Installer Sphinx<a class="headerlink" href="#installer-sphinx" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Installer Sphinx:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install Sphinx
+</pre></div>
+</div>
+</div>
+<div class="section" id="editer-la-documentation">
+<h2>Editer la documentation<a class="headerlink" href="#editer-la-documentation" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Pour modifier la documentation: éditer les fichiers .rst.</p>
+</div>
+<div class="section" id="generer-la-documentation-au-format-html">
+<h2>Générer la documentation au format HTML<a class="headerlink" href="#generer-la-documentation-au-format-html" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Pour (re-)générer la documentation HTML:</p>
+<div class="highlight-python"><div class="highlight"><pre>make html
+</pre></div>
+</div>
+<p>La documentation est générée dans le répertoire <code class="docutils literal"><span class="pre">_build/html</span></code>. Le point
+d&#8217;entrée est <code class="docutils literal"><span class="pre">_build/html/index.html</span></code>.</p>
+</div>
+<div class="section" id="generer-la-documentation-au-format-pdf">
+<h2>Générer la documentation au format PDF<a class="headerlink" href="#generer-la-documentation-au-format-pdf" title="Lien permanent vers ce titre">¶</a></h2>
+<p>La génération de la documentation PDF nécessite des dépendances
+complémentaires. Sous Ubuntu 16.04:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo apt install texlive texlive-latex-extra
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Le paquet <code class="docutils literal"><span class="pre">texlive-latex-extra</span></code> contient le fichier <code class="docutils literal"><span class="pre">titlesec.sty</span></code> qui
+est nécessaire avec Sphinx.</p>
+<p class="last">Le paquet <code class="docutils literal"><span class="pre">texlive-lang-french</span></code> est nécessaire pour générer des
+documents en français.</p>
+</div>
+<p>Pour générer la documentation PDF:</p>
+<div class="highlight-python"><div class="highlight"><pre>make latexpdf
+</pre></div>
+</div>
+<p>Le fichier PDF est généré vers <code class="docutils literal"><span class="pre">_build/latex/pocnetconfschemaless.pdf</span></code>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Index général"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentation pocnetconfschemaless 0.1.0-SNAPSHOT</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2017, Gwenael Lambrouin.
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

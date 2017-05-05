@@ -72,6 +72,12 @@ Cela signifie que le hostname n'est pas défini.
 Ecrire le hostname
 ------------------
 
+.. note::
+
+   This test requires a fix in ODL netconf project (see
+   :ref:`issue-bad-transformer`). The fix is already enabled if you followed
+   the instructions in :ref:`patch-netconf`.
+
 On va définir le hostname à la valeur ``ntt`` avec::
 
    POST http://localhost:8181/restconf/operations/pocnetconfschemaless:set-hostname
