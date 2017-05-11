@@ -12,8 +12,17 @@ We use the poc by sending RESTConf requests:
 * to the pocnetconfschemaless service (to read and write the device hostname).
 
 In the examples, we assume that the RESTConf client (eg Firefox with the
-RESTClient plugin) is on the same machine as ODL. One connect to ODL with the
-login ``admin`` and the password ``admin``.
+RESTClient plugin) is on the same machine as ODL. We will connect to ODL
+with the default credentials: login ``admin`` and the password ``admin``.
+
+Prerequisites
+-------------
+
+On the router:
+
+* NETCONF must be enabled
+
+* The ``admin`` user must be authorized to perform NETCONF locks
 
 Mount the device
 ----------------
@@ -46,6 +55,33 @@ the device in ODL::
         <capability>urn:ietf:params:netconf:capability:startup:1.0</capability>
       </non-module-capabilities>
     </node>
+
+.. note::
+
+   For a Nokia device, we use the ``<non-module-capabilities>`` container to
+   override the capabilities of the device. This is to work around an issue
+   with the NETCONF implementation of Nokia devices running SR OS.
+
+   SR OS announces two NETCONF capabilities related to the way the
+   NETCONF client must interact with the device configuration datastores:
+   ``writable-running`` and ``candidate``. The former means that the running
+   configuration (ie the current configuration) can be edited and will be
+   effective immediately after edition. The latter
+   means that the candidate configuration (ie a draft configuration) can be
+   edited and will be validated with the ``commit`` operation.
+
+   Normally, according to :rfc:`6241`, each datastore should have
+   its own lock. But on Nokia devices, only one lock protects the two
+   datastores. Taking one lock will take both locks. ODL is not aware of this
+   proprietary behaviour: when editing the
+   configuration, ODL will attempt to acquire both locks. The first attempt
+   will succeed, but the second one will fail. In the end, the configuration
+   change will not go well.
+
+   Here, we override the device capabilities to only retain the ``candidate``
+   capability. Consequently, ODL will only try to acquire the lock for the
+   candidate configuration datastore.
+
 
 ODL replies with HTTP code ``201 Created``.
 
