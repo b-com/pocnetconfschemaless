@@ -9,6 +9,7 @@ des équipements) et au service pocnetconfschemaless (pour lancer les requêtes 
 On suppose que le client RESTConf (eg Firefox + plugin RESTClient) se trouve sur la même machine qu'ODL. La connexion
 à ODL se fait avec le login ``admin`` et le mot de passe ``admin``.
 
+.. _mount-netconf-testtool:
 
 Monter le device netconf-testtool
 ---------------------------------

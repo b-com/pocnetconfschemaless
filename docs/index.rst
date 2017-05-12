@@ -29,6 +29,9 @@ Developer guide
 
 .. toctree::
 
+   developer_guide/overview
+   developer_guide/dependencies
+   developer_guide/mount_point
    developer_guide/build_the_docs
 
 OpenDaylight issues
