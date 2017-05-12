@@ -8,9 +8,10 @@
 
 package com.bcom.pocnetconfschemaless.impl;
 
+import com.bcom.pocnetconfschemaless.utils.NetconfMountPoint;
+
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.CheckedFuture;
 import com.google.common.util.concurrent.Futures;
 import javax.xml.transform.dom.DOMSource;
@@ -22,10 +23,6 @@ import org.opendaylight.controller.md.sal.dom.api.DOMDataReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataWriteTransaction;
 import org.opendaylight.controller.md.sal.dom.api.DOMMountPoint;
 import org.opendaylight.controller.md.sal.dom.api.DOMMountPointService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.network.topology.topology.topology.types.TopologyNetconf;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -43,46 +40,6 @@ class Hostname {
 
     static private RpcResult<Void> SUCCESS = RpcResultBuilder.<Void>success().build();
 
-    static YangInstanceIdentifier getMountPointId(String nodeId) {
-        YangInstanceIdentifier mountPointId = YangInstanceIdentifier.builder()
-                // network-topology:network-topology
-                .node(NetworkTopology.QNAME)
-                // .../topology/topology-netconf/
-                .node(Topology.QNAME)
-                .nodeWithKey(Topology.QNAME, QName.create(Topology.QNAME, "topology-id").intern(), TopologyNetconf.QNAME.getLocalName())
-                // .../node/netconf-testtool/
-                .node(Node.QNAME)
-                .nodeWithKey(Node.QNAME, QName.create(Node.QNAME, "node-id").intern(), nodeId)
-                .build();
-        return mountPointId;
-    }
-
-    /** Get the mount point object for the specified NETCONF node.
-     *
-     * Equivalent to '.../restconf/<config | operational>network-topology:network-topology/topology/topology-netconf/node/netconf-testtool/yang-ext:mount/'
-     *
-     * That same mount point can be used to read both config and operational data
-     *
-     * @param domMountPointService Mount point service to retrieve the mount point
-     * @param nodeId Name of the NETCONF mount point
-     *
-     * @return The hostname
-     *
-     * @throws java.lang.IllegalArgumentException: Unable to locate mountpoint (not mounted yet or not configured)
-     */
-
-    private static DOMMountPoint getMountPoint(final DOMMountPointService domMountPointService, String nodeId) {
-        YangInstanceIdentifier mountPointId = getMountPointId(nodeId);
-
-        final Optional<DOMMountPoint> nodeOptional = domMountPointService.getMountPoint(mountPointId);
-
-        Preconditions.checkArgument(nodeOptional.isPresent(),
-                "Unable to locate mountpoint: %s, not mounted yet or not configured", nodeId);
-
-        DOMMountPoint mountPoint = nodeOptional.get();
-        return mountPoint;
-    }
-
     /** Get the device hostname from its configuration
      *
      * @param nodeId Name of the NETCONF mount point
@@ -92,7 +49,9 @@ class Hostname {
      */
 
     static String getHostname(final DOMMountPointService domMountPointService, String nodeId, String deviceFamily) {
-        final DOMMountPoint mountPoint = getMountPoint(domMountPointService, nodeId);
+        final DOMMountPoint mountPoint = NetconfMountPoint.getNetconfNodeMountPoint
+                (domMountPointService,
+                nodeId);
 
         final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
 
@@ -152,7 +111,9 @@ class Hostname {
 
     static void editConfig(final DOMMountPointService domMountPointService, String nodeId,
                            YangInstanceIdentifier yangInstanceIdentifier, AnyXmlNode anyXmlNode) {
-        final DOMMountPoint mountPoint = getMountPoint(domMountPointService, nodeId);
+        final DOMMountPoint mountPoint = NetconfMountPoint.getNetconfNodeMountPoint
+                (domMountPointService,
+                nodeId);
         final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
         DOMDataWriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
 
@@ -245,7 +206,9 @@ class Hostname {
             }
         }
 
-        final DOMMountPoint mountPoint = getMountPoint(domMountPointService, nodeId);
+        final DOMMountPoint mountPoint = NetconfMountPoint.getNetconfNodeMountPoint
+                (domMountPointService,
+                nodeId);
         final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
         DOMDataWriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
 
