@@ -13,11 +13,17 @@ impl
 pom.xml
 ~~~~~~~
 
-The project depends on the ``sal-netconf-connector`` artifact of ODL netconf
+The project depends on the ``ietf-topology`` MD-SAL model
+and on the ``sal-netconf-connector`` artifact of ODL netconf
 project. In the ``impl/pom.xml`` file, add the following
 dependency to the ``<dependencies>`` section:
 
 .. code-block:: xml
+
+   <dependency>
+     <groupId>org.opendaylight.mdsal.model</groupId>
+     <artifactId>ietf-topology</artifactId>
+   </dependency>
 
    <dependency>
      <groupId>org.opendaylight.netconf</groupId>
