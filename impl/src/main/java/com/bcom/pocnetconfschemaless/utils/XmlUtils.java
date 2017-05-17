@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package com.bcom.pocnetconfschemaless.impl;
+package com.bcom.pocnetconfschemaless.utils;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 public class XmlUtils {
     static final Logger LOG = LoggerFactory.getLogger(XmlUtils.class);
@@ -48,59 +49,6 @@ public class XmlUtils {
         }
         Document doc = builder.newDocument();
         return doc;
-    }
-
-    /**
-     * Add an attribute to a given element of a XML document.
-     *
-     * @param doc		The document to edit
-     * @param element	The element to edit
-     * @param attrName	The attribute to add
-     * @param attrValue	The added attribute value
-     */
-    public static void setAttr(Document doc, Element element, String attrName, String attrValue) {
-        Attr attr = doc.createAttribute(attrName);
-        attr.appendChild(doc.createTextNode(attrValue));
-        element.setAttributeNode(attr);
-    }
-
-    /**
-     * Create a child text element and append it to a given father element of a XML document.
-     *
-     * @param doc 			The document to edit
-     * @param father		The element in which the new element should be added
-     * @param elementName	The new element name
-     * @param elementValue	The new element value
-     */
-    public static void appendTextElement(Document doc, Element father, String elementName, String elementValue) {
-        Element child = doc.createElement(elementName);
-        father.appendChild(child);
-        child.appendChild(doc.createTextNode(elementValue));
-    }
-
-    /**
-     * Create a child element, append it to a given father and return the newly created element.
-     *
-     * @param doc 			The document to edit
-     * @param father		The element (father) in which the new element (child) should be added
-     * @param elementName	The child element name
-     * @return The created child element.
-     */
-    public static Element appendPlaceholderElement(Document doc, Element father, String elementName) {
-        Element child = doc.createElement(elementName);
-        father.appendChild(child);
-        return child;
-    }
-
-    /**
-     * Create an empty child element and append it to a given father .
-     *
-     * @param doc 			The document to edit
-     * @param father		The element (father) in which the new element (child) should be added
-     * @param elementName	The child element name
-     */
-    public static void appendEmptyElement(Document doc, Element father, String elementName) {
-        father.appendChild(doc.createElement(elementName));
     }
 
     public static String nodeTypeToString(short nodeType) {
@@ -191,5 +139,45 @@ public class XmlUtils {
         else if (Node.TEXT_NODE == nodeType) {
             log.trace(prefix + " text data: " + node.getNodeValue());
         }
+    }
+
+    /** Given a XML DOM node, look for the value of a text element identified
+     *  by its tag name.
+     *
+     * This method is meant to be used in the reply of a NETCONF get-config
+     * operation, so it will check that the tag is contained in a <data> tag.
+     *
+     * @param node The starting point for the search in the XML document.
+     * @param tagName The name of the tag that contains the text element.
+     *
+     * @return The first text text value found as a String. null if no value can
+     * be found.
+     */
+
+    static public String getTextValueByTagName(Node node, String tagName) {
+        String textValue = null;
+
+        try {
+            Element root = ((Document) node).getDocumentElement();
+
+            if (! root.getNodeName().equals("data"))
+                return null;
+
+            NodeList hostnameNodes = root.getElementsByTagName(tagName);
+            Node hostnameNode = hostnameNodes.item(0);
+            NodeList childs = hostnameNode.getChildNodes();
+            for (int i=0; i<childs.getLength(); i++) {
+                Node child = childs.item(i);
+                if (child instanceof Text) {
+                    textValue = child.getNodeValue();
+                    break;
+                }
+            }
+        }
+        catch (Exception e) {
+            LOG.debug("Could not find hostname in Node: ", e);
+        }
+
+        return textValue;
     }
 }

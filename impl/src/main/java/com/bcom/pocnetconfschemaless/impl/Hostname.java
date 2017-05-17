@@ -8,13 +8,18 @@
 
 package com.bcom.pocnetconfschemaless.impl;
 
+import javax.xml.transform.dom.DOMSource;
+
+import com.bcom.pocnetconfschemaless.device.JunOS;
+import com.bcom.pocnetconfschemaless.device.NetconfTesttool;
+import com.bcom.pocnetconfschemaless.device.NokiaR14;
 import com.bcom.pocnetconfschemaless.utils.NetconfMountPoint;
+import com.bcom.pocnetconfschemaless.utils.XmlUtils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
 import com.google.common.util.concurrent.Futures;
-import javax.xml.transform.dom.DOMSource;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
@@ -27,7 +32,6 @@ import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
-import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.NodeIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.AnyXmlNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.impl.schema.Builders;
@@ -40,55 +44,56 @@ class Hostname {
 
     static private RpcResult<Void> SUCCESS = RpcResultBuilder.<Void>success().build();
 
-    /** Get the device hostname from its configuration
-     *
-     * @param nodeId Name of the NETCONF mount point
-     * @param deviceFamily Family of the NETCONF device (junos, netconf-testtool)
-     *
-     * @return the hostname
-     */
-
-    static String getHostname(final DOMMountPointService domMountPointService, String nodeId, String deviceFamily) {
-        final DOMMountPoint mountPoint = NetconfMountPoint.getNetconfNodeMountPoint
-                (domMountPointService,
-                nodeId);
-
-        final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
-
-        DOMDataReadOnlyTransaction rtx = dataBroker.newReadOnlyTransaction();
-
-        // The YANG Instance Identifier is relative to the mountpoint.
-        // (note: When we set it to 'null', we read the whole device configuration, but the netconf stack fails to
-        // analyze the response: the special value YangInstanceIdentifier.EMPTY must be used instead)
-
-        YangInstanceIdentifier yiid = YangInstanceIdentifier.EMPTY;
+    static HostnameAdapter makeHostnameAdaptor(String deviceFamily) {
         if (deviceFamily != null) {
             if (deviceFamily.equals("junos")) {
-                yiid = YangInstanceIdentifier.builder()
-                        .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "configuration")))
-                        .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "system")))
-                        .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "host-name")))
-                        .build();
-            }
-            else if (deviceFamily.equals("nokia")) {
-                yiid = YangInstanceIdentifier.builder()
-                        .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_NS, "configure")))
-                        .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_SYSTEM_NS, "system")))
-                        //.node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_SYSTEM_NS, "name")))
-                            // => cannot filter on a leaf element with Nokia R14
-                        .build();
+                return new JunOS();
+            } else if (deviceFamily.equals("nokia")) {
+                return new NokiaR14();
             }
         }
+        return new NetconfTesttool();  // default device adaptor
+     }
+
+    /** Get the hostname of a NETCONF device
+     *
+     * @param domMountPointService Mount point service
+     * @param nodeId Name of the NETCONF mount point
+     * @param deviceFamily Family of the NETCONF device. Can be "junos",
+     *                     "nokia", "netconf-testtool" or null. If null,
+     *                     defaults to "netconf-testtool".
+     *
+     * @return the hostname in case of success, or a special string "[noname#]"
+     *         in case of error.
+     */
+
+    static String getHostname(final DOMMountPointService domMountPointService,
+                                String nodeId, String deviceFamily) {
+
+        final DOMMountPoint mountPoint = NetconfMountPoint.getNetconfNodeMountPoint(
+                domMountPointService, nodeId);
+        final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
+        DOMDataReadOnlyTransaction rtx = dataBroker.newReadOnlyTransaction();
 
         String hostname;
         try {
-            Optional<NormalizedNode<?, ?>> opt = rtx.read(LogicalDatastoreType.CONFIGURATION, yiid).checkedGet();
+            HostnameAdapter hostnameAdapter = makeHostnameAdaptor(deviceFamily);
+
+            // The YANG Instance Identifier is relative to the mountpoint.
+            // (note: When we set it to 'null', we read the whole device
+            // configuration, but the netconf stack fails to analyze the
+            // response: the special value YangInstanceIdentifier.EMPTY must be
+            // used instead)
+
+            Optional<NormalizedNode<?, ?>> opt = rtx.read(
+                    LogicalDatastoreType.CONFIGURATION,
+                    hostnameAdapter.getGetHostnameYIID()).checkedGet();
 
             if (opt.isPresent()) {
                 final AnyXmlNode anyXmlData = (AnyXmlNode) opt.get();
                 org.w3c.dom.Node node = anyXmlData.getValue().getNode();
                 XmlUtils.logNode(LOG, node);
-                hostname = HostnameXmlUtils.lookForHostname(node, deviceFamily);
+                hostname = hostnameAdapter.lookForHostname(node);
                 if (null == hostname) {
                     hostname = "[noname4]";
                 }
@@ -109,11 +114,41 @@ class Hostname {
         return hostname;
     }
 
-    static void editConfig(final DOMMountPointService domMountPointService, String nodeId,
-                           YangInstanceIdentifier yangInstanceIdentifier, AnyXmlNode anyXmlNode) {
-        final DOMMountPoint mountPoint = NetconfMountPoint.getNetconfNodeMountPoint
-                (domMountPointService,
-                nodeId);
+    /** Set the hostname of a NETCONF device
+     *
+     * @param domMountPointService Mount point service
+     * @param nodeId Name of the NETCONF mount point
+     * @param deviceFamily Family of the NETCONF device. Can be "junos",
+     *                     "nokia", "netconf-testtool" or null. If null,
+     *                     defaults to "netconf-testtool".
+     * @param hostname The new hostname
+     */
+
+    static void setHostname(final DOMMountPointService domMountPointService,
+                            String nodeId, String deviceFamily, String hostname) {
+
+        HostnameAdapter hostnameAdapter = makeHostnameAdaptor(deviceFamily);
+
+        Document hostnameDocument = hostnameAdapter.createSetHostnameDocument(hostname);
+        LOG.trace("setHostname(): hand-made XML document:");
+        XmlUtils.logNode(LOG, hostnameDocument);
+
+        YangInstanceIdentifier yangInstanceIdentifier = hostnameAdapter.getSetHostnameYIID();
+        AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
+                .withNodeIdentifier(new YangInstanceIdentifier.NodeIdentifier(
+                        QName.create(
+                                hostnameAdapter.getSetHostnameNS(),
+                                yangInstanceIdentifier.getLastPathArgument().getNodeType().getLocalName())))
+                .withValue(new DOMSource(hostnameDocument.getDocumentElement()))
+                .build();
+
+        editConfig(domMountPointService, nodeId, yangInstanceIdentifier, anyXmlNode);
+    }
+
+    private static void editConfig(final DOMMountPointService domMountPointService, String nodeId,
+                                   YangInstanceIdentifier yangInstanceIdentifier, AnyXmlNode anyXmlNode) {
+        final DOMMountPoint mountPoint = NetconfMountPoint.getNetconfNodeMountPoint(
+                domMountPointService, nodeId);
         final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
         DOMDataWriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
 
@@ -129,145 +164,6 @@ class Hostname {
             @Override
             public RpcResult<Void> apply(final Void result) {
                 LOG.info("config writtent to '{}'", nodeId);
-                return SUCCESS;
-            }
-        });
-
-        // rem: in the real world, the future should be returned (see NcmountProvider.writeRoutes)
-    }
-
-    static void setHostnameJunOS(final DOMMountPointService domMountPointService,
-                                 String nodeId, String hostname) {
-
-        Document hostnameDocument = HostnameXmlUtils.createHostnameDocumentJunOS(hostname);
-
-        LOG.trace("setHostnameJunOS(): hand-made XML document:");
-        XmlUtils.logNode(LOG, hostnameDocument);
-
-        YangInstanceIdentifier yangInstanceIdentifier = YangInstanceIdentifier.builder()
-                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "configuration")))
-                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "system")))
-                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.JUNOS_NS, "host-name")))
-                .build();
-
-        AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
-                .withNodeIdentifier(new YangInstanceIdentifier.NodeIdentifier(
-                        QName.create(
-                                HostnameXmlUtils.JUNOS_NS,
-                                yangInstanceIdentifier.getLastPathArgument().getNodeType().getLocalName())))
-                .withValue(new DOMSource(hostnameDocument.getDocumentElement()))
-                .build();
-
-        LOG.trace("setHostnameJunOS(): XML document after conversion to AnyXmlNode:");
-        XmlUtils.logNode(LOG, anyXmlNode.getValue().getNode());
-
-        editConfig(domMountPointService, nodeId, yangInstanceIdentifier, anyXmlNode);
-    }
-
-    static void setHostnameNokia(final DOMMountPointService domMountPointService,
-                                 String nodeId, String hostname) {
-
-        Document hostnameDocument = HostnameXmlUtils.createHostnameDocumentNokia(hostname);
-
-        LOG.trace("setHostnameNokia(): hand-made XML document:");
-        XmlUtils.logNode(LOG, hostnameDocument);
-
-        YangInstanceIdentifier yangInstanceIdentifier = YangInstanceIdentifier.builder()
-                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_NS, "configure")))
-                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_SYSTEM_NS, "system")))
-                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NOKIA_CONF_SYSTEM_NS, "name")))
-                .build();  // TODO: factorize with getHostname()
-
-        AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
-                .withNodeIdentifier(new YangInstanceIdentifier.NodeIdentifier(
-                        QName.create(
-                                HostnameXmlUtils.NOKIA_CONF_SYSTEM_NS,
-                                yangInstanceIdentifier.getLastPathArgument().getNodeType().getLocalName())))
-                .withValue(new DOMSource(hostnameDocument.getDocumentElement()))
-                .build();
-
-        LOG.trace("setHostnameNokia(): XML document after conversion to AnyXmlNode:");
-        XmlUtils.logNode(LOG, anyXmlNode.getValue().getNode());
-
-        editConfig(domMountPointService, nodeId, yangInstanceIdentifier, anyXmlNode);
-    }
-
-    static void setHostname(final DOMMountPointService domMountPointService,
-                            String nodeId, String deviceFamily, String hostname) {
-
-        if (deviceFamily != null) {
-            if (deviceFamily.equals("junos")) {
-                setHostnameJunOS(domMountPointService, nodeId, hostname);
-                return;
-            }
-            else if (deviceFamily.equals("nokia")) {
-                setHostnameNokia(domMountPointService, nodeId, hostname);
-                return;
-            }
-        }
-
-        final DOMMountPoint mountPoint = NetconfMountPoint.getNetconfNodeMountPoint
-                (domMountPointService,
-                nodeId);
-        final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
-        DOMDataWriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
-
-        /* This works, but let's try another approach. Commented out for history reasons: */
-//        Document hostnameDocument = HostnameXmlUtils.createSystemHostnameDocument(hostname);
-//        LOG.trace("setHostname(): hand-made XML document:");
-//        XmlUtils.logNode(LOG, hostnameDocument);
-//        YangInstanceIdentifier systemYIID = YangInstanceIdentifier.builder()
-//                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "system")))
-//                //.node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "hostname")))
-//                .build();
-//        AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
-//                .withNodeIdentifier(new YangInstanceIdentifier.NodeIdentifier(
-//                        QName.create(
-//                                HostnameXmlUtils.NS,
-//                                systemYIID.getLastPathArgument().getNodeType().getLocalName())))
-//                .withValue(new DOMSource(hostnameDocument.getDocumentElement()))
-//                .build();
-//        writeTransaction.put(LogicalDatastoreType.CONFIGURATION, systemYIID, anyXmlNode);
-
-        Document hostnameDocument = HostnameXmlUtils.createHostnameDocument(hostname);
-
-        LOG.trace("setHostname(): hand-made XML document:");
-        XmlUtils.logNode(LOG, hostnameDocument);
-
-        YangInstanceIdentifier hostnameYIID = YangInstanceIdentifier.builder()
-                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "system")))
-                .node(new NodeIdentifier(QName.create(HostnameXmlUtils.NS, "hostname")))
-                .build();
-
-        AnyXmlNode anyXmlNode = Builders.anyXmlBuilder()
-                .withNodeIdentifier(new YangInstanceIdentifier.NodeIdentifier(
-                        QName.create(
-                                HostnameXmlUtils.NS,
-                                hostnameYIID.getLastPathArgument().getNodeType().getLocalName())))
-                .withValue(new DOMSource(hostnameDocument.getDocumentElement()))
-                .build();
-
-        LOG.trace("setHostname(): XML document after conversion to AnyXmlNode:");
-        XmlUtils.logNode(LOG, anyXmlNode.getValue().getNode());
-
-        // invoke edit-config, merge the config
-        //
-        // note: writeTransaction.put() is in my experience the preferred method
-        //       to use with netconf-testtool.
-
-        // writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, YangInstanceIdentifier.EMPTY, anyXmlNode);
-        //writeTransaction.put(LogicalDatastoreType.CONFIGURATION, YangInstanceIdentifier.EMPTY, anyXmlNode);
-        writeTransaction.put(LogicalDatastoreType.CONFIGURATION, hostnameYIID, anyXmlNode);
-        //writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, systemYIID, anyXmlNode);
-
-        // commit
-        //writeTransaction.submit();
-
-        final CheckedFuture<Void, TransactionCommitFailedException> submit = writeTransaction.submit();
-        Futures.transform(submit, new Function<Void, RpcResult<Void>>() {
-            @Override
-            public RpcResult<Void> apply(final Void result) {
-                LOG.info("hostname '{}' writtent to '{}'", hostname, nodeId);
                 return SUCCESS;
             }
         });
