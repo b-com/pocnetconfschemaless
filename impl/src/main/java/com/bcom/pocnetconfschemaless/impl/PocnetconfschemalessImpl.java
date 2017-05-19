@@ -11,7 +11,6 @@ package com.bcom.pocnetconfschemaless.impl;
 import org.opendaylight.controller.md.sal.dom.api.DOMMountPointService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.pocnetconfschemaless.rev170317.*;
 import org.opendaylight.yangtools.yang.common.RpcResult;
-import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,9 +31,9 @@ public class PocnetconfschemalessImpl implements PocnetconfschemalessService {
     public Future<RpcResult<Void>> setHostname(SetHostnameInput input) {
         LOG.info(String.format("set-hostname(node-id=%s, device-family=%s, hostname=%s)",
                 input.getNodeId(), input.getDeviceFamily(), input.getHostname()));
-        Hostname.setHostname(domMountPointService, input.getNodeId(), input.getDeviceFamily(), input.getHostname());
-        Void nothing = null;
-        return RpcResultBuilder.success(nothing).buildFuture();
+
+        return Hostname.setHostname(domMountPointService,
+                input.getNodeId(), input.getDeviceFamily(), input.getHostname());
     }
 
     @Override
