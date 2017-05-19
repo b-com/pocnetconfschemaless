@@ -9,8 +9,14 @@ Documentation de pocnetconfschemaless
 pocnetconfschemaless est un PoC développé à b-com qui montre comment interagir avec un équipement NETCONF ne proposant
 pas de modèle YANG depuis le code d'une application OpenDaylight.
 
-Le poc permet de lire et d'écrire le hostname d'un device NETCONF. Les devices supportés sont
-netconf-testtool (simulateur d'équipement NETCONF fourni avec ODL) et le routeur Juniper MX5 de b-com.
+Le poc permet de lire et d'écrire le hostname d'un device NETCONF. Les devices
+supportés et testés à b-com sont:
+
+* netconf-testtool (simulateur d'équipement NETCONF fourni avec ODL)
+
+* le routeur Juniper MX5
+
+* le routeur virtuel Nokia vSIM
 
 User Guide
 ----------
@@ -32,6 +38,8 @@ Developer guide
    developer_guide/overview
    developer_guide/dependencies
    developer_guide/mount_point
+   developer_guide/read_config
+   developer_guide/edit_config
    developer_guide/build_the_docs
 
 OpenDaylight issues

@@ -1,7 +1,8 @@
 Démarrer le logiciel pocnetconfschemaless et le device NETCONF
 ==============================================================
 
-pocnetconfschemaless peut travailler soit avec netconf-testtool, soit avec le routeur Juniper MX5.
+pocnetconfschemaless peut travailler soit avec netconf-testtool, soit avec le
+routeur Juniper MX5, soit avec le routeur virtuel vSIM de Nokia.
 
 Démarrer OpenDaylight
 ---------------------

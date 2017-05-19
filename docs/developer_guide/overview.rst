@@ -33,6 +33,8 @@ Read the configuration datastore
 
 * Look for the desired information in the output (DOM object)
 
+For detailed explanations, see :ref:`read-config`.
+
 Change the configuration datastore
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -52,3 +54,5 @@ Change the configuration datastore
 * Submit the transaction
 
 * Check for possible errors
+
+For detailed explanations, see :ref:`edit-config`.
