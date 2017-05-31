@@ -178,7 +178,7 @@ device and looking for a value in the response can fail in three different ways:
 3. Searched value not found in the data returned by the transaction's
    ``read()`` method.
 
-Here is some pseudo-code that shows a possible way to handle the errors:
+Here is a code skeleton that shows where the different errors can be caught:
 
 .. code-block:: java
 

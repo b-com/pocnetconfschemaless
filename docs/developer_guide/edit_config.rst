@@ -298,7 +298,10 @@ Check for possible errors
 Using ODL in schemaless mode to edit the configuration datastore of a NETCONF
 device can fail in several different ways:
 
-1. ``IllegalArgumentException`` thrown by code that get the mount point when
-   the NETCONF device is not mounted in ODL.
+1. ``IllegalArgumentException`` may be thrown by the code that gets the mount
+   point when the NETCONF device is not mounted in ODL.
 
-TODO: complete that section.
+2. ``IllegalStateException`` may be thrown at the retrieval of the data broker.
+
+3. ``TransactionCommitFailedException`` may be thrown while waiting for the
+   commit operation to complete.
