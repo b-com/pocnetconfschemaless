@@ -1,8 +1,8 @@
 Construire le logiciel pocnetconfschemaless
 ===========================================
 
-Cette version de pocnetconfschemaless utilise la version SNAPSHOT de la version Carbon d'OpenDaylight. En effet,
-elle nécessite de patcher la projet OpenDaylight netconf afin de corriger un bug dans le code netconf d'ODL et un bug
+Cette version de pocnetconfschemaless utilise la version Carbon d'OpenDaylight.
+Elle nécessite de patcher la projet OpenDaylight netconf afin de corriger un bug dans le code netconf d'ODL et un bug
 dans l'outil de test netconf-testtool présent dans le projet netconf.
 
 Récupérer et construire une première fois le code de pocnetconfschemaless
@@ -22,14 +22,13 @@ on récupère le code netconf buggé::
 Récupérer, patcher et construire le projet netconf
 --------------------------------------------------
 
-On récupère le code du projet netconf depuis le mirroir GitHub d'ODL, et on travaille sur la branche stable/carbon::
+On récupère le code du projet netconf depuis le mirroir GitHub d'ODL, et on
+travaille sur le tag release/carbon::
 
    $ mkdir -p ~/code/opendaylight
    $ git clone https://github.com/opendaylight/netconf.git
    $ cd netconf
-   $ git checkout stable/carbon
-   La branche stable/carbon est paramétrée pour suivre la branche distante stable/carbon depuis origin.
-   Basculement sur la nouvelle branche 'stable/carbon'
+   $ git checkout release/carbon
 
 Depuis le répertoire du projet netconf, appliquer les patchs::
 
