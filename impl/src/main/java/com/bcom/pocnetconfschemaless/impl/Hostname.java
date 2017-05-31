@@ -72,7 +72,7 @@ class Hostname {
                                 String nodeId, String deviceFamily) {
 
         final DOMMountPoint mountPoint = NetconfMountPoint.getNetconfNodeMountPoint(
-                domMountPointService, nodeId);
+                domMountPointService, nodeId);  /* TODO: handle possible error */
         final DOMDataBroker dataBroker = mountPoint.getService(DOMDataBroker.class).get();
         DOMDataReadOnlyTransaction rtx = dataBroker.newReadOnlyTransaction();
 
