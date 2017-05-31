@@ -28,6 +28,9 @@ Attendre l'apparition du log suivant::
 .. note:: L'installation de la feature ``odl-netconf-console`` n'est pas nécessaire pour utiliser le poc. Elle
    est toutefois utile pour voir simplement l'état de la connexion d'ODL avec les différents devices NETCONF.
 
+.. note:: La commande ``log:set TRACE org.opendaylight.netconf.sal`` permet de
+   voir dans les logs ODL les messages NETCONF envoyés et reçus par ODL.
+
 .. _start-netconf-testtool:
 
 Démarrer netconf-testtool
