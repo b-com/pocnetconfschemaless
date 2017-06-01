@@ -78,7 +78,7 @@ parent, so we need to give it. Excerpts:
 
    <properties>
      <!-- ... -->
-     <netconf-connector.version>1.2.0-SNAPSHOT</netconf-connector.version>
+     <netconf-connector.version>1.2.0-Carbon</netconf-connector.version>
    </properties>
 
 .. code-block:: xml

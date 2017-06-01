@@ -17,9 +17,9 @@ Démarrer OpenDaylight
    opendaylight-user@root>feature:install odl-netconf-console
    opendaylight-user@root>log:tail
 
-Attendre l'apparition du log suivant::
+Attendre l'apparition dans les logs d'une ligne semblable à::
 
-    2017-04-21 16:07:19,238 | INFO  | config-pusher    | ConfigPusherImpl                 | 130 - org.opendaylight.controller.config-persister-impl - 0.5.3.SNAPSHOT | Successfully pushed configuration snapshot 04-xsql.xml(odl-pocnetconfschemaless-ui,odl-pocnetconfschemaless-ui)
+    2017-05-31 18:28:10,114 | INFO  | config-pusher    | ConfigPusherImpl                 | 131 - org.opendaylight.controller.config-persister-impl - 0.6.0.Carbon | Successfully pushed configuration snapshot 04-xsql.xml(odl-pocnetconfschemaless-ui,odl-pocnetconfschemaless-ui)
 
 .. warning:: Les features du poc et de netconf ne doivent pas être chargées automatiquement lors du premier démarrage
    de karaf. C'est le comportement par défaut de pocnetconfschemaless. Sinon, à cause d'un bug, la connexion SSH ne
@@ -63,6 +63,5 @@ pour les besoins du poc::
 Pour démarrer netconf-testtool::
 
    $ cd ~/code/roads/pocnetconfschemaless/netconf-testtool-config
-   $ java -jar ~/code/opendaylight/netconf/netconf/tools/netconf-testtool/target/netconf-testtool-1.2.0-SNAPSHOT-executable.jar \
+   $ java -jar ~/code/opendaylight/netconf/netconf/tools/netconf-testtool/target/netconf-testtool-1.2.0-Carbon-executable.jar \
        --schemas-dir yang-hostname-v2/  --debug true
-
