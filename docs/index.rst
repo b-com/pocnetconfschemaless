@@ -3,20 +3,27 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Documentation de pocnetconfschemaless
-=====================================
+pocnetconfschemaless documentation
+==================================
 
-pocnetconfschemaless est un PoC développé à b-com qui montre comment interagir avec un équipement NETCONF ne proposant
-pas de modèle YANG depuis le code d'une application OpenDaylight.
+pocnetconfschemaless is a proof of concept OpenDaylight application
+that will show you how to read and write the configuration of a NETCONF device
+that does not offer YANG models or whose YANG model cannot be parsed by ODL.
 
-Le poc permet de lire et d'écrire le hostname d'un device NETCONF. Les devices
-supportés et testés à b-com sont:
+The poc will allow you to read and write the hostname of a variety of NETCONF
+devices:
 
-* netconf-testtool (simulateur d'équipement NETCONF fourni avec ODL)
+* netconf-testtool (NETCONF device simulator provided by ODL),
 
-* le routeur Juniper MX5
+* Juniper MX5 routers,
 
-* le routeur virtuel Nokia vSIM
+* Nokia vSIM virtual routers.
+
+pocnetconfschemaless has been developed at `b-com`_. It is licensed under the
+`Eclipse Public License v1.0`_.
+
+.. _b-com: https://b-com.com/
+.. _Eclipse Public License v1.0: https://www.eclipse.org/legal/epl-v10.html
 
 User Guide
 ----------
@@ -40,7 +47,6 @@ Developer guide
    developer_guide/mount_point
    developer_guide/read_config
    developer_guide/edit_config
-   developer_guide/build_the_docs
 
 OpenDaylight issues
 -------------------
@@ -49,6 +55,12 @@ OpenDaylight issues
 
    odl_issues/01_bad_transformer
 
+Documentation developer guide
+-----------------------------
+
+.. toctree::
+
+   developer_guide/build_the_docs
 
 Indices and tables
 ==================

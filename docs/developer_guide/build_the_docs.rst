@@ -1,56 +1,56 @@
-Générer la documentation
-========================
+Generate the documentation
+==========================
 
-La doc de pocnetconfschemaless est écrite au format reStructuredText, et la
-version HTML est générée à l'aide de Sphinx.
+pocnetconfschemaless documentation is written in reStructuredText text files
+using Sphinx extensions. The HTML version of the documentation can be generated
+with Sphinx.
 
-Installer Sphinx
-----------------
+Install Sphinx
+--------------
 
-Installer Sphinx::
+::
 
     $ pip install Sphinx
 
-Editer la documentation
------------------------
+Generate the HTML documentation
+-------------------------------
 
-Pour modifier la documentation: éditer les fichiers ``.rst`` contenus dans le
-répertoire ``docs``.
-
-Générer la documentation au format HTML
----------------------------------------
-
-Pour (re-)générer la documentation HTML::
+::
 
     $ cd docs
     $ make html
 
-La documentation est générée dans le répertoire ``_build/html``. Le point
-d'entrée est ``_build/html/index.html``.
+The HTML doc will be generated in ``_build/html``. Its entry point will be
+``_build/html/index.html``.
 
-Pour copier la doc vers le dossier ``pocnetconfschemaless`` du site web du projet
-ROADS sur defacto, faire::
+.. note::
 
-   $ scp -r _build/html/* forge.b-com.com:/home/groups/ROADS/htdocs/pocnetconfschemaless
+   If you're a b-com developer, you can copy the HTML doc to the
+   ``pocnetconfschemaless`` folder of the ROADS project on defacto web site
+   with::
 
-Générer la documentation au format PDF
---------------------------------------
+      $ scp -r _build/html/* forge.b-com.com:/home/groups/ROADS/htdocs/pocnetconfschemaless
 
-La génération de la documentation PDF nécessite des dépendances
-complémentaires. Sous Ubuntu 16.04::
+Generate the PDF documentation
+------------------------------
+
+.. warning::
+
+   In its current form, the PDF-generated documentation is not good looking
+   (incomplete table of contents, truncated code examples, ...)
+
+If you want to generate pocnetconfschemaless doc as a PDF document, you'll
+need to install extra dependencies. Under Ubuntu 16.04::
 
     $ sudo apt install texlive texlive-latex-extra
 
 .. note::
 
-   Le paquet ``texlive-latex-extra`` contient le fichier ``titlesec.sty`` qui
-   est nécessaire avec Sphinx.
+   ``texlive-latex-extra`` provides the ``titlesec.sty`` file which is needed
+   by Sphinx.
 
-   Le paquet ``texlive-lang-french`` est nécessaire pour générer des
-   documents en français.
-
-Pour générer la documentation PDF::
+You'll build the PDF file with::
 
     $ make latexpdf
 
-Le fichier PDF est généré vers ``_build/latex/pocnetconfschemaless.pdf``.
+You'll find the file in ``_build/latex/pocnetconfschemaless.pdf``.
