@@ -56,6 +56,9 @@ the device in ODL::
       </non-module-capabilities>
     </node>
 
+.. note:: You will need to adapt the ``host``, ``username`` and ``password``
+   fields to match your device configuration.
+
 .. note::
 
    For a Nokia device, we use the ``<non-module-capabilities>`` container to

@@ -1,11 +1,5 @@
-Démarrer le logiciel pocnetconfschemaless et le device NETCONF
-==============================================================
-
-pocnetconfschemaless peut travailler soit avec netconf-testtool, soit avec le
-routeur Juniper MX5, soit avec le routeur virtuel vSIM de Nokia.
-
-Démarrer OpenDaylight
----------------------
+Start pocnetconfschemaless
+==========================
 
 ::
 
@@ -17,51 +11,19 @@ Démarrer OpenDaylight
    opendaylight-user@root>feature:install odl-netconf-console
    opendaylight-user@root>log:tail
 
-Attendre l'apparition dans les logs d'une ligne semblable à::
+ODL is ready when the logs show a line that looks like::
 
     2017-05-31 18:28:10,114 | INFO  | config-pusher    | ConfigPusherImpl                 | 131 - org.opendaylight.controller.config-persister-impl - 0.6.0.Carbon | Successfully pushed configuration snapshot 04-xsql.xml(odl-pocnetconfschemaless-ui,odl-pocnetconfschemaless-ui)
 
-.. warning:: Les features du poc et de netconf ne doivent pas être chargées automatiquement lors du premier démarrage
-   de karaf. C'est le comportement par défaut de pocnetconfschemaless. Sinon, à cause d'un bug, la connexion SSH ne
-   s'établit pas avec netconf-testtool ou avec le routeur Juniper MX5.
+.. warning:: ``odl-pocnetconf-schemaless-*`` and ``odl-netconf-*`` features must
+   not be installed automatically at the start of karaf, and this is the default
+   behaviour of pocnetconfschemaless. Else, because of a bug, the SSH connection
+   will not establish with some network devices such as netconf-testool or the
+   Juniper MX5 router.
 
-.. note:: L'installation de la feature ``odl-netconf-console`` n'est pas nécessaire pour utiliser le poc. Elle
-   est toutefois utile pour voir simplement l'état de la connexion d'ODL avec les différents devices NETCONF.
+.. note:: It is not necessary to install ``odl-netconf-console`` to use the
+   poc. However, it is useful to see the connection state of ODL and the mounted
+   NETCONF devices.
 
-.. note:: La commande ``log:set TRACE org.opendaylight.netconf.sal`` permet de
-   voir dans les logs ODL les messages NETCONF envoyés et reçus par ODL.
-
-.. _start-netconf-testtool:
-
-Démarrer netconf-testtool
--------------------------
-
-A la place d'un vrai équipement réseau, le poc peut travailler avec le simulateur d'équipement NETCONF fourni dans le
-projet netconf d'ODL.
-
-Pour le poc, la structure de la configuration utilisée par netconf-testtool est donnée dans un fichier YANG construit
-pour les besoins du poc::
-
-    $ cat ~/code/roads/pocnetconfschemaless/netconf-testtool-config/yang-hostname-v2/hostname@2017-03-31.yang
-    module hostname {
-        yang-version 1;
-        namespace "urn:opendaylight:hostname";
-        prefix "hn";
-
-        revision "2017-03-31";
-
-        container system {
-            leaf hostname {
-                type string;
-            }
-            leaf location {
-                type string;
-            }
-        }
-    }
-
-Pour démarrer netconf-testtool::
-
-   $ cd ~/code/roads/pocnetconfschemaless/netconf-testtool-config
-   $ java -jar ~/code/opendaylight/netconf/netconf/tools/netconf-testtool/target/netconf-testtool-1.2.0-Carbon-executable.jar \
-       --schemas-dir yang-hostname-v2/  --debug true
+.. note:: The ``log:set TRACE org.opendaylight.netconf.sal`` command allows to
+   see the NETCONF message sent and received by ODL in ODL logs.

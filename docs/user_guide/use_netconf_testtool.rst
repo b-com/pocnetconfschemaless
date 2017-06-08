@@ -1,17 +1,55 @@
-Utiliser pocnetconfschemaless avec netconf-testtool
-===================================================
+Use pocnetconfschemaless with netconf-testtool
+==============================================
 
-Pour démarrer le device, voir :ref:`start-netconf-testtool`.
+Instead of a real network device, pocnetconfschemaless can work with the
+NETCONF device simulator provided by ODL netconf project: netconf-testtool.
 
-Le poc s'utilise en passant des requêtes RESTConf au service de configuration netconf d'ODL (pour le montage
-des équipements) et au service pocnetconfschemaless (pour lancer les requêtes de lecture/écriture du hostname).
+We use the poc by sending RESTConf requests:
 
-On suppose que le client RESTConf (eg Firefox + plugin RESTClient) se trouve sur la même machine qu'ODL. La connexion
-à ODL se fait avec le login ``admin`` et le mot de passe ``admin``.
+* to ODL netconf configuration service (to mount the device in ODL),
+
+* to the pocnetconfschemaless service (to read and write the device hostname).
+
+In the examples, we assume that the RESTConf client (eg Firefox with the
+RESTClient plugin) is on the same machine as ODL. We will connect to ODL
+with the default credentials: login ``admin`` and the password ``admin``.
+
+Start netconf-testtool
+----------------------
+
+For the needs of the poc, we wrote a small YANG module that describes the
+structure of the configuration used by netconf-testtool. The contents of that
+YANG module can be seen with::
+
+
+    $ cat ~/code/roads/pocnetconfschemaless/netconf-testtool-config/yang-hostname-v2/hostname@2017-03-31.yang
+    module hostname {
+        yang-version 1;
+        namespace "urn:opendaylight:hostname";
+        prefix "hn";
+
+        revision "2017-03-31";
+
+        container system {
+            leaf hostname {
+                type string;
+            }
+            leaf location {
+                type string;
+            }
+        }
+    }
+
+You'll start netconf-testtool with::
+
+   $ cd ~/code/roads/pocnetconfschemaless/netconf-testtool-config
+   $ java -jar ~/code/opendaylight/netconf/netconf/tools/netconf-testtool/target/netconf-testtool-1.2.0-Carbon-executable.jar \
+       --schemas-dir yang-hostname-v2/  --debug true
+
 
 .. _mount-netconf-testtool:
 
-Monter le device netconf-testtool
+Mount the netconf-testtool device
 ---------------------------------
 
 ::
@@ -29,9 +67,10 @@ Monter le device netconf-testtool
       <schemaless xmlns="urn:opendaylight:netconf-node-topology">true</schemaless>
     </node>
 
-ODL répond avec le code HTTP ``201 Created``.
+ODL replies with HTTP status code ``201 Created``.
 
-La commande karaf ``netconf:list-devices`` permet de confirmer que le device netconf-testtool est bien monté::
+The ``netconf:list-devices`` karaf command will allow you to confirm that the
+netconf-testtool device is mounted and connected::
 
     opendaylight-user@root>netconf:list-devices
     NETCONF ID        | NETCONF IP | NETCONF Port | Status
@@ -39,8 +78,8 @@ La commande karaf ``netconf:list-devices`` permet de confirmer que le device net
     netconf-testtool  | 127.0.0.1  | 17830        | connected
     controller-config | 127.0.0.1  | 1830         | connected
 
-Lire le hostname
-----------------
+Read the hostname
+-----------------
 
 ::
 
@@ -55,12 +94,12 @@ Lire le hostname
 
 .. note::
 
-   Dans tous les appels ``get-hostname`` et ``set-hostname``, on pourrait rajouter la famille de device NETCONF
-   avec ``"device-family": "netconf-testtool"``.
+   In all the calls to ``get-hostname`` et ``set-hostname``, we could add the
+   NETCONF device family with ``"device-family": "netconf-testtool"``.
 
-   Mais ce n'est pas nécessaire car c'est la valeur par défaut.
+   Actually, this is not necessary because this is the default value.
 
-pocnetconftesttool répond avec le contenu suivant::
+Since the hostname is not defined yet, pocnetconftesttool replies with::
 
     {
          "output": {
@@ -68,9 +107,8 @@ pocnetconftesttool répond avec le contenu suivant::
          }
     }
 
-Cela signifie que le hostname n'est pas défini.
 
-Ecrire le hostname
+Write the hostname
 ------------------
 
 .. note::
@@ -79,7 +117,7 @@ Ecrire le hostname
    :ref:`issue-bad-transformer`). The fix is already enabled if you followed
    the instructions in :ref:`patch-netconf`.
 
-On va définir le hostname à la valeur ``ntt`` avec::
+The following example shows how to set the hostname to the ``ntt`` value::
 
    POST http://localhost:8181/restconf/operations/pocnetconfschemaless:set-hostname
    Content-Type: application/yang.data+json
@@ -91,9 +129,10 @@ On va définir le hostname à la valeur ``ntt`` avec::
        }
    }
 
-ODL répond avec le code HTTP ``200 OK``.
+ODL replies with HTTP status code ``200 OK``.
 
-Dans les logs de netconf-testtool, on voit passer (entre autres) le message NETCONF suivant::
+In netconf-testtool logs and ODL logs, we can see (among others) the following
+NETCONF message::
 
     <rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="m-4">
     <edit-config>
@@ -110,10 +149,10 @@ Dans les logs de netconf-testtool, on voit passer (entre autres) le message NETC
     </rpc>
 
 
-Relire le hostname
-------------------
+Re-read the hostname
+--------------------
 
-Comme lors de la première lecture, on demande le hostname avec::
+As during the first read, we can do::
 
    POST http://localhost:8181/restconf/operations/pocnetconfschemaless:get-hostname
    Content-Type: application/yang.data+json
@@ -124,7 +163,7 @@ Comme lors de la première lecture, on demande le hostname avec::
        }
    }
 
-pocnetconftesttool répond cette fois avec le contenu suivant::
+This time, pocnetconftesttool replies with the following contents::
 
     {
          "output": {
@@ -132,7 +171,8 @@ pocnetconftesttool répond cette fois avec le contenu suivant::
          }
     }
 
-Dans les logs netconf-testtool, on voit qu'ODL demande la configuration avec le message NETCONF::
+In netconf-testtool tools, we can see that ODL requests the device configuration
+with the following NETCONF message::
 
     <rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="m-7">
     <get-config>
@@ -142,7 +182,7 @@ Dans les logs netconf-testtool, on voit qu'ODL demande la configuration avec le 
     </get-config>
     </rpc>
 
-netconf-testtool répond avec::
+netconf-testtool replies with::
 
     <rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="m-7">
     <data>
@@ -153,10 +193,10 @@ netconf-testtool répond avec::
     </rpc-reply>
 
 
-Démonter le device netconf-testtool
+Unmount the netconf-testtool device
 -----------------------------------
 
-Une fois le travail sur l'équipement terminé, on peut le démonter avec la requête REST suivant::
+When you have finished to work with the device, you can unmount it with the
+following RESTConf request::
 
    DELETE http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/netconf-testtool
-

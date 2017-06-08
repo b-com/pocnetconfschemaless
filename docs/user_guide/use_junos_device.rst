@@ -1,19 +1,28 @@
-Utiliser pocnetconfschemaless avec un équipement Juniper sous JunOS
-===================================================================
+Use pocnetconfschemaless with a Juniper device running JunOS
+============================================================
 
-Dans cet exemple, on travaille avec le routeur Juniper MX5 (JunOS 14.2R1.9) utilisé sur la maquette FSOL du projet
-ROADS. Le hostname du routeur est pjunren1.
+In our lab at b-com, we worked with a Juniper MX5 router running JunOS 14.2R1.9.
+However, the poc should work with other Juniper devices running JunOS.
 
-Le poc s'utilise en passant des requêtes RESTConf au service de configuration netconf d'ODL (pour le montage
-des équipements) et au service pocnetconfschemaless (pour lancer les requêtes de lecture/écriture du hostname).
+We assume that the initial router hostname is pjunren1, and we will read and
+change that hostname.
 
-On suppose que le client RESTConf (eg Firefox + plugin RESTClient) se trouve sur la même machine qu'ODL. La connexion
-à ODL se fait avec le login ``admin`` et le mot de passe ``admin``.
+We use the poc by sending RESTConf requests:
 
-Monter le device pjunren1
--------------------------
+* to ODL netconf configuration service (to mount the device in ODL),
 
-::
+* to the pocnetconfschemaless service (to read and write the device hostname).
+
+In the examples, we assume that the RESTConf client (eg Firefox with the
+RESTClient plugin) is on the same machine as ODL. We will connect to ODL
+with the default credentials: login ``admin`` and the password ``admin``.
+
+Mount the device
+----------------
+
+We choose to call the mount point ``pjunren1`` (shortcut for physical Juniper
+device located in Rennes number 1). The following RESTConf requests mounts
+the device in ODL::
 
     PUT http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/pjunren1
     Content-Type: application/xml
@@ -28,9 +37,13 @@ Monter le device pjunren1
       <schemaless xmlns="urn:opendaylight:netconf-node-topology">true</schemaless>
     </node>
 
-ODL répond avec le code HTTP ``201 Created``.
+.. note:: You will need to adapt the ``host``, ``username`` and ``password``
+   fields to match your device configuration.
 
-La commande karaf ``netconf:list-devices`` permet de confirmer que le device pjunren1 est bien monté::
+ODL replies with HTTP status code ``201 Created``.
+
+The ``netconf:list-devices`` karaf command will allow you to check that the
+pjunren1 device is mounted and connected::
 
     opendaylight-user@root>netconf:list-devices
     NETCONF ID        | NETCONF IP  | NETCONF Port | Status
@@ -38,8 +51,8 @@ La commande karaf ``netconf:list-devices`` permet de confirmer que le device pju
     controller-config | 127.0.0.1   | 1830         | connected
     pjunren1          | 10.51.0.102 | 830          | connected
 
-Lire le hostname
-----------------
+Read the hostname
+-----------------
 
 ::
 
@@ -53,7 +66,7 @@ Lire le hostname
        }
    }
 
-pocnetconftesttool répond avec le contenu suivant::
+pocnetconftesttool replies with the following contents::
 
     {
          "output": {
@@ -62,10 +75,11 @@ pocnetconftesttool répond avec le contenu suivant::
     }
 
 
-Ecrire (modifier) le hostname
------------------------------
+Change the hostname
+-------------------
 
-On va définir le hostname à la valeur ``pjunren1new`` avec::
+In the following example, we change the hostname to the new value
+``pjunren1new``::
 
    POST http://localhost:8181/restconf/operations/pocnetconfschemaless:set-hostname
    Content-Type: application/yang.data+json
@@ -78,9 +92,9 @@ On va définir le hostname à la valeur ``pjunren1new`` avec::
        }
    }
 
-ODL répond avec le code HTTP ``200 OK``.
+ODL replies with HTTP status code ``200 OK``.
 
-Dans les logs d'ODL, on voit passer (entre autres) le message NETCONF suivant::
+In ODL logs, we can see (among others) the following NETCONF message::
 
     <rpc message-id="m-29" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
     <edit-config>
@@ -97,10 +111,10 @@ Dans les logs d'ODL, on voit passer (entre autres) le message NETCONF suivant::
     </edit-config>
     </rpc>
 
-Relire le hostname
-------------------
+Re-read the hostname
+--------------------
 
-Comme lors de la première lecture, on demande le hostname avec::
+As during the first read, we ask for the hostname with::
 
    POST http://localhost:8181/restconf/operations/pocnetconfschemaless:get-hostname
    Content-Type: application/yang.data+json
@@ -112,7 +126,7 @@ Comme lors de la première lecture, on demande le hostname avec::
        }
    }
 
-pocnetconftesttool répond cette fois avec le contenu suivant::
+pocnetconftesttool replies with the new contents::
 
     {
          "output": {
@@ -120,9 +134,10 @@ pocnetconftesttool répond cette fois avec le contenu suivant::
          }
     }
 
-Démonter le device pjunren1
----------------------------
+Unmount the device
+------------------
 
-Une fois le travail sur l'équipement terminé, on peut le démonter avec la requête REST suivant::
+When you have finished to work with the device, you can unmount it with the
+following RESTConf request::
 
    DELETE http://localhost:8181/restconf/config/network-topology:network-topology/topology/topology-netconf/node/pjunren1
