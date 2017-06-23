@@ -9,10 +9,6 @@ The documentation of the last version of the poc is
 available online on GitHub pages at:
 https://b-com.github.io/pocnetconfschemaless-docs/
 
-(For b-com developers: the documentation of the last version of the poc is
-also available online on b-com forge at:
-https://forge.b-com.com/www/roads/pocnetconfschemaless/)
-
 The documentation "source code" can be found in the docs/
 directory and can be re-generated following the instructions given in:
 docs/developer_guide/build_the_docs.rst.
